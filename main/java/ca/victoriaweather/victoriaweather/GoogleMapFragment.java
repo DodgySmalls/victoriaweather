@@ -1,0 +1,97 @@
+package ca.victoriaweather.victoriaweather;
+
+import android.os.Bundle;
+import android.util.Log;
+
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+
+import java.util.List;
+
+public class GoogleMapFragment extends SupportMapFragment {
+    public static final String FM_TAG = "FRAGMENT_GOOGLE_MAP";
+    public static final LatLng DEFAULT_LATLNG = new LatLng(48.4622993, 236.6909943);
+    public static final float DEFAULT_ZOOM = 13;
+
+    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+
+    public GoogleMapFragment(){
+    }
+
+    public static GoogleMapFragment newInstance() {
+        GoogleMapFragment m = new GoogleMapFragment();
+        //TODO: utilize bundle for best practice
+        Bundle args = new Bundle();
+        return m;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        setUpMapIfNeeded();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpMapIfNeeded();
+    }
+
+    public void reloadPins() {
+        mMap.clear();
+        //TODO verify that foreach isn't resolving this on each loop
+        for(Observation o : ((WeatherApp)(getActivity().getApplicationContext())).getObservations()) {
+            if(o.hasLatLng()) {
+                MarkerOptions m = new MarkerOptions();
+                m.position(o.getLatLng());
+                mMap.addMarker(m);
+            } else {
+                Log.d("GoogleMapFragment", "reloadPins(): An observation existed without a valid LatLng");
+            }
+        }
+    }
+    /**
+     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
+     * installed) and the map has not already been instantiated.. This will ensure that we only ever
+     * call {@link #setUpMap()} once when {@link #mMap} is not null.
+     * <p/>
+     * If it isn't installed {@link SupportMapFragment} (and
+     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
+     * install/update the Google Play services APK on their device.
+     * <p/>
+     * A user can return to this FragmentActivity after following the prompt and correctly
+     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
+     * have been completely destroyed during this process (it is likely that it would only be
+     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
+     * method in {@link #onResume()} to guarantee that it will be called.
+     */
+    private void setUpMapIfNeeded() {
+        // Do a null check to confirm that we have not already instantiated the map.
+        if (mMap == null) {
+            // Try to obtain the map from the SupportMapFragment.
+            mMap = this.getMap();
+            // Check if we were successful in obtaining the map.
+            if (mMap != null) {
+                setUpMap();
+            }
+        }
+    }
+
+    /**
+     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
+     * just add a marker near Africa.
+     * <p/>
+     * This should only be called once and when we are sure that {@link #mMap} is not null.
+     */
+    private void setUpMap() {
+        mMap.setMyLocationEnabled(true);
+        reloadPins();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LATLNG, DEFAULT_ZOOM));
+    }
+
+}

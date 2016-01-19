@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/control_bar"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/black">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_panel_1"
+        android:onClick="onFavouritesListSelected" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_panel_2"
+        android:onClick="onObservationListSelected" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_panel_3"
+        android:onClick="onMapSelected" />
+
+    <FrameLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/actionpanel_reload_pane">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="!" />
+
+        </FrameLayout>
+</LinearLayout>
