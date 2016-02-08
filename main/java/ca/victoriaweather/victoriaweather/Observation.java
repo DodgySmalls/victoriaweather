@@ -1,10 +1,13 @@
 package ca.victoriaweather.victoriaweather;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Observation {
@@ -45,6 +48,8 @@ public class Observation {
     public static final String ATTR_EVAPOTRANSPIRATION_UNIT = "evapotranspiration_units";
     public static final String ATTR_INSOLATION_PREDICTED = "insolation_predicted";
     public static final String ATTR_INSOLATION_PREDICTED_UNIT = "insolation_predicted_unit";
+    public static final String ATTR_STATION_FAULT = "station_fault";
+    public static final String ATTR_IS_FAVOURITE = "ATTR_IS_FAVOURITE";
     public static final String HASH_KEYLIST = "observation_keylist";
 
     private HashMap<String, String> attributes;    //named attributes of an observation
@@ -53,6 +58,15 @@ public class Observation {
     public Observation(String id) {
         this.id = id;
         attributes = new HashMap<String, String>();
+    }
+
+    @Override
+    public String toString() {
+        if(attributes.containsKey("station_name")) {
+            return(attributes.get("station_name"));
+        } else {
+            return "unknown_station_name_err";
+        }
     }
 
     public String getId() {
@@ -94,6 +108,11 @@ public class Observation {
         return false;
     }
 
+    //check if this observation has an entry for a specific attribute name
+    public String getAttribute(String attr) {
+        return this.attributes.get(attr);
+    }
+
     //Add a new attribute to the observation. If an old attribute existed, overwrite and return false
     public boolean putAttribute(String key, String val) {
         if(this.hasAttribute(key)) {
@@ -104,6 +123,23 @@ public class Observation {
 
         attributes.put(key, val);
         return true;
+    }
+
+    public boolean isFavourite() {
+        if(this.hasAttribute(ATTR_IS_FAVOURITE)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setFavourite(boolean b) {
+        if(b) {
+            this.putAttribute(ATTR_IS_FAVOURITE, "yes");
+        } else {
+            if(attributes.containsKey(ATTR_IS_FAVOURITE)) {
+                attributes.remove(ATTR_IS_FAVOURITE);
+            }
+        }
     }
 
     //Turn this observation into a bundle
@@ -136,12 +172,36 @@ public class Observation {
         }
     }
 
-    @Override
-    public String toString() {
-        if(attributes.containsKey("station_name")) {
-            return(attributes.get("station_name"));
-        } else {
-            return "unhappy";
+    //Convert a list of Observations into an ArrayList of bundles
+    public static ArrayList<Bundle> observationsToBundleArrayList(List<Observation> observations) {
+        ArrayList<Bundle> l = new ArrayList<Bundle>();
+        for(Observation o : observations) {
+            l.add(o.toBundle());
         }
+        return l;
     }
+
+    //Convert an array of bundles (Parcelable) into an ArrayList of Observations
+    public static ArrayList<Observation> observationsFromBundleArrayList(List<? extends Parcelable> list) {
+        ArrayList<Observation> o = new ArrayList<Observation>();
+        for(Parcelable p : list) {
+            o.add(Observation.fromBundle((Bundle) p));
+        }
+        return o;
+    }
+
+    //returns the index of the matched observation, or -1 if the list does not contain the observation
+    public static int listContainsObservation(List<Observation> list, Observation observation) {
+        for(int i=0;i<list.size();i++) {
+            if(list.get(i).getId().equals(observation.getId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static void addObservationLexicographic(List<Observation> list, Observation observation) {
+        list.add(observation);  //seems like list.add automatically adds with lexicographic order using obj.toString()?
+    }
+
 }

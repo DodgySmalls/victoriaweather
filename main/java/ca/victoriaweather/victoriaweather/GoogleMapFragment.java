@@ -12,7 +12,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 
 import java.util.List;
 
-public class GoogleMapFragment extends SupportMapFragment {
+public class GoogleMapFragment extends SupportMapFragment implements ObservationDependentUpdatable {
     public static final String FM_TAG = "FRAGMENT_GOOGLE_MAP";
     public static final LatLng DEFAULT_LATLNG = new LatLng(48.4622993, 236.6909943);
     public static final float DEFAULT_ZOOM = 13;
@@ -42,19 +42,6 @@ public class GoogleMapFragment extends SupportMapFragment {
         setUpMapIfNeeded();
     }
 
-    public void reloadPins() {
-        mMap.clear();
-        //TODO verify that foreach isn't resolving this on each loop
-        for(Observation o : ((WeatherApp)(getActivity().getApplicationContext())).getObservations()) {
-            if(o.hasLatLng()) {
-                MarkerOptions m = new MarkerOptions();
-                m.position(o.getLatLng());
-                mMap.addMarker(m);
-            } else {
-                Log.d("GoogleMapFragment", "reloadPins(): An observation existed without a valid LatLng");
-            }
-        }
-    }
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
@@ -90,8 +77,20 @@ public class GoogleMapFragment extends SupportMapFragment {
      */
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
-        reloadPins();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LATLNG, DEFAULT_ZOOM));
     }
 
+    public void updateObservations(List<Bundle> observationList) {
+        mMap.clear();
+        //TODO verify that foreach isn't resolving this on each loop
+        for(Observation o : Observation.observationsFromBundleArrayList(observationList)) {
+            if(o.hasLatLng()) {
+                MarkerOptions m = new MarkerOptions();
+                m.position(o.getLatLng());
+                mMap.addMarker(m);
+            } else {
+                Log.d("GoogleMapFragment", "reloadPins(): An observation existed without a valid LatLng");
+            }
+        }
+    }
 }

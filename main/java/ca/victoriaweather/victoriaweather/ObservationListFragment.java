@@ -10,9 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ObservationListFragment extends ListFragment{
+import java.util.ArrayList;
+import java.util.List;
+
+public class ObservationListFragment extends ListFragment implements ObservationDependentUpdatable {
     public static final String FM_TAG = "FRAGMENT_LIST_OBSERVATION";
+    private static final String BUNDLE_OBSERVATIONS = "BUNDLE_OBSERVATIONS";
     private interactionListener mListener;
+    private List<Observation> observations;
 
     public static ObservationListFragment newInstanceOf() {
         ObservationListFragment f = new ObservationListFragment();
@@ -24,14 +29,27 @@ public class ObservationListFragment extends ListFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        if(savedInstanceState == null) {
+            observations = new ArrayList<Observation>();
+            setListAdapter(new ArrayAdapter<Observation>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, observations));
+        } else {
+            observations = Observation.observationsFromBundleArrayList(savedInstanceState.getParcelableArrayList(BUNDLE_OBSERVATIONS));
+            setListAdapter(new ArrayAdapter<Observation>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, observations));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        try {
+            savedInstanceState.putParcelableArrayList(BUNDLE_OBSERVATIONS, Observation.observationsToBundleArrayList(observations));
+        } catch (NullPointerException e) {
+            Log.d("ObservationListFragment", "onSaveInstanceState() NullPointerException @observations");
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //WeatherApp app = (WeatherApp)(getActivity().getApplicationContext());
-        //setListAdapter(new ArrayAdapter<Observation>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, app.getObservations()));
-        //app.registerObservationAdapter((ArrayAdapter<Observation>) getListAdapter());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -67,7 +85,6 @@ public class ObservationListFragment extends ListFragment{
     public void onDestroy() {
         Log.d("ObservationListFragment", "onDestroy()");
         super.onDestroy();
-        ((WeatherApp)(getActivity().getApplicationContext())).dropObservationAdapter();
     }
 
     @Override
@@ -78,10 +95,19 @@ public class ObservationListFragment extends ListFragment{
         }
     }
 
-    public void registerListAdapter() {
-        WeatherApp app = (WeatherApp)(getActivity().getApplicationContext());
-        setListAdapter(new ArrayAdapter<Observation>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, app.getObservations()));
-        app.registerObservationAdapter((ArrayAdapter<Observation>) getListAdapter());
+    public void updateObservations(List<Bundle> list) {
+        int index;
+
+        for(Bundle b: list) {
+            Observation o = Observation.fromBundle(b);
+            if((index  = Observation.listContainsObservation(observations, o)) != -1) {
+                observations.remove(index);
+            }
+            Observation.addObservationLexicographic(observations, o);
+        }
+
+        setListShown(true);
+        ((ArrayAdapter)getListAdapter()).notifyDataSetChanged();
     }
 
     public interface interactionListener {

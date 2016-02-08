@@ -1,8 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-</LinearLayout>
+    <!-- controls (when more are added will need to put them in a vertical LinearLayout -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/conditions_toggle_fav"
+        android:text="@string/conditions_toggle_favourite"
+        android:onClick="toggleFavouriteFromConditionsFragment" />
+
+    <!-- conditions (attributes) ViewGroup -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true">
+
+        <TextView
+            android:gravity="right"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:id="@+id/station_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@color/light_font"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="-3"
+            android:shadowDy="-1"
+            android:shadowRadius="24.5"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/condition_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/condition_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+            <TextView
+                android:id="@+id/condition_temperature_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/unit_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/condition_average_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/condition_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+            <TextView
+                android:id="@+id/condition_average_wind_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/unit_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/condition_rain"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/condition_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+            <TextView
+                android:id="@+id/condition_rain_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/unit_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/condition_pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/condition_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+            <TextView
+                android:id="@+id/condition_pressure_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/unit_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/condition_uv_index"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/condition_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+            <TextView
+                android:id="@+id/condition_uv_index_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/unit_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/condition_insolation"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/condition_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+            <TextView
+                android:id="@+id/condition_insolation_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/unit_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right" >
+
+            <TextView
+                android:id="@+id/condition_humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/condition_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+            <TextView
+                android:id="@+id/condition_humidity_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/unit_unavailable"
+                android:onClick="showGraphSelectionDialog"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

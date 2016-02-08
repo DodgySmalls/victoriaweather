@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,8 +37,8 @@ public class ObservationFetcherFragment extends Fragment {
 
     }
 
-    public void execute() {
-        new FetchObservationListTask().execute("none");
+    public void execute(WeatherApp app) {
+        new FetchObservationListTask().execute(app);
     }
 
     @Override
@@ -66,15 +67,13 @@ public class ObservationFetcherFragment extends Fragment {
         void onRetrievedList();
     }
 
-    private class FetchObservationListTask extends AsyncTask<String, String, List<Observation>> {
+    private class FetchObservationListTask extends AsyncTask<WeatherApp, String, List<Observation>> {
+        private WeatherApp app;
         private static final String STATION_XML_URL = "http://www.victoriaweather.ca/stations/latest/allcurrent.xml";
         private Exception runtimeException;
 
         //currently priority isn't used and the whole list is always updated
-        protected List<Observation> doInBackground(String... priority) {
-            //WeatherApp app = ((WeatherApp)getActivity().getApplicationContext());
-            //app.setStationLock(true);
-
+        protected List<Observation> doInBackground(WeatherApp... app) {
             List<Observation> acq = new ArrayList<Observation>();
             try {
                 URL url = new URL(FetchObservationListTask.STATION_XML_URL);
@@ -125,7 +124,13 @@ public class ObservationFetcherFragment extends Fragment {
             }
 
             //TODO: CLEANUP PARAMETER PASSING -> doInBackground & -> onPostExecute
-            try {Thread.sleep(2000);}catch(Exception e) {}
+            try {Thread.sleep(5000);}catch(Exception e) {}
+
+            Queue<Observation> messages = app[0].getObservationQueue();
+            for(Observation o : acq) {
+                messages.add(o);
+            }
+
             publishProgress("finished");
             return acq;
         }
@@ -136,11 +141,6 @@ public class ObservationFetcherFragment extends Fragment {
 
         protected void onPostExecute(List<Observation> l) {
             Log.d("FetchStationListTask", "Post Execute.");
-
-            WeatherApp app = ((WeatherApp)getActivity().getApplicationContext());
-            for(Observation o : l) {
-                app.checkedObservationUpdate(o);
-            }
 
             networkListener.onRetrievedList();
             //app.setStationLock(false);

@@ -14,6 +14,9 @@
     <string name="action_panel_2">List</string>
     <string name="action_panel_3">Map</string>
 
+    <string name="condition_unavailable">unavailable</string>
+    <string name="unit_unavailable">  </string>
+    <string name="conditions_toggle_favourite">+fav</string>
     <string name="google_maps_key">AIzaSyAwtKHuov6BDkMU19Yg5TlcFxD8_a1qIX0</string>
 
 
