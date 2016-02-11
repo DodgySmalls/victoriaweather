@@ -1,8 +1,29 @@
 <resources>
-
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
     </style>
 
+    <!-- refrence on messing with this stuff:
+        http://stackoverflow.com/questions/8024706/how-do-i-change-the-background-color-of-the-actionbar-of-an-actionbaractivity-us
+        http://stackoverflow.com/questions/18769708/how-to-get-dark-action-bar-for-theme-holo-light-dialogwhenlarge
+    -->
+
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="actionBarTheme">@style/DarkActionBarOverlay</item>
+    </style>
+
+    <style name="DarkActionBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">#000000</item>
+    </style>
+
+    <style name="Layout_ConditionRow">
+        <item name="android:background">@color/condition_row_background</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+    </style>
+
+    <style name="ConditionTitle">
+        <!--TODO styles -->
+    </style>
 </resources>

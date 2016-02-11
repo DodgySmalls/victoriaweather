@@ -83,6 +83,7 @@ public class ConditionsFragment extends Fragment implements ObservationDependent
             }
 
             title.setText(observation.getAttribute(Observation.ATTR_NAME_LONG));
+
             if(observation.hasAttribute(Observation.ATTR_TEMPERATURE)) {
                 temperature.setText(observation.getAttribute(Observation.ATTR_TEMPERATURE));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
@@ -133,6 +134,18 @@ public class ConditionsFragment extends Fragment implements ObservationDependent
                 }
             }
 
+            Button mapBridge = (Button)(currentView.findViewById(R.id.conditions_map_bridge_button));
+            if(observation.hasLatLng()) {
+                mapBridge.setVisibility(View.VISIBLE);
+            } else {
+                mapBridge.setVisibility(View.GONE);
+            }
+
+            TextView time = (TextView)(currentView.findViewById(R.id.condition_observation_time));
+            if(observation.hasAttribute(Observation.ATTR_TIME)) {
+                time.setText(observation.getAttribute(Observation.ATTR_TIME));
+            }
+
         } catch (Exception e) {
             Log.d("ConditionsFragment", "attemptDisplayUpdate(): Failed due to exception being thrown");
         }
@@ -160,24 +173,7 @@ public class ConditionsFragment extends Fragment implements ObservationDependent
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conditions, container, false);
-
         attemptDisplayUpdate(view);
-/*
-        TextView title = (TextView)(view.findViewById(R.id.station_title));
-        TextView temperature = (TextView)(view.findViewById(R.id.condition_temperature));
-        Button fav = (Button)(view.findViewById(R.id.conditions_toggle_fav));
-
-
-        //TODO Since a conditionFragment
-        if(observation.isFavourite()) {
-            fav.setText("-fav");
-        }
-
-        title.setText(observation.getAttribute(Observation.ATTR_NAME_LONG));
-        if(observation.hasAttribute(Observation.ATTR_TEMPERATURE)) {
-            temperature.setText(observation.getAttribute(Observation.ATTR_TEMPERATURE));
-        }*/
-
         return view;
     }
 
@@ -185,6 +181,5 @@ public class ConditionsFragment extends Fragment implements ObservationDependent
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putBundle(OBSERVATION_BUNDLE_STR, observation.toBundle());
-
     }
 }

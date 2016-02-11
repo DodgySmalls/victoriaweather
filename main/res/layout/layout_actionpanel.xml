@@ -26,12 +26,23 @@
     <FrameLayout
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:id="@+id/actionpanel_reload_pane">
+        android:id="@+id/actionpanel_reload_pane"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="!" />
+            android:textColor="@color/grey_font"
+            android:text="@string/action_panel_refresh_button"
+            android:id="@+id/action_panel_refresh"
+            android:onClick="attemptRefresh"/>/>
 
-        </FrameLayout>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:id="@+id/actionpanel_networking_progressbar"/>
+    </FrameLayout>
+
 </LinearLayout>

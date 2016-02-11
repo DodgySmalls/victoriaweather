@@ -25,20 +25,36 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class ObservationFetcherFragment extends Fragment {
     public static final String FM_TAG = "FRAGMENT_OBSERVATION_FETCHER";
 
+    private AsyncTask<WeatherApp, String, List<Observation>> mAsyncTask = null;
+    private networkListener networkListener;
+
     public static ObservationFetcherFragment newInstance() {
         ObservationFetcherFragment off = new ObservationFetcherFragment();
         //setArguments();
         return off;
     }
 
-    private networkListener networkListener;
+
 
     public ObservationFetcherFragment() {
 
     }
 
-    public void execute(WeatherApp app) {
-        new FetchObservationListTask().execute(app);
+    public boolean execute(WeatherApp app) {
+        Log.d("ObservationFetcher", "execution attempt");
+
+        //An interrupt after this comparison but before the next line would be a race condition in concurrent code.
+        // However, in android's threading model these calls will, ostensibly, only be generated on the UI thread sequentially.
+        // Even if they are not, allowing multiple asynctasks to exist will only potentially damage the UI (and be computationally wasteful)
+        // internal data structures can handle any number of threads
+        if(mAsyncTask == null) {
+            (mAsyncTask = new FetchObservationListTask()).execute(app);
+
+            //TODO modify ui to show progress
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -65,12 +81,22 @@ public class ObservationFetcherFragment extends Fragment {
 
     public interface networkListener {
         void onRetrievedList();
+        void onFailedToRetrieveList();
     }
 
     private class FetchObservationListTask extends AsyncTask<WeatherApp, String, List<Observation>> {
         private WeatherApp app;
         private static final String STATION_XML_URL = "http://www.victoriaweather.ca/stations/latest/allcurrent.xml";
         private Exception runtimeException;
+
+        //http://stackoverflow.com/questions/6645203/android-asynctask-avoid-multiple-instances-running
+
+        @Override
+        protected void onCancelled() {
+            mAsyncTask = null;
+        }
+
+        //TODO have seen this exception a few times: SAXParseException
 
         //currently priority isn't used and the whole list is always updated
         protected List<Observation> doInBackground(WeatherApp... app) {
@@ -124,7 +150,7 @@ public class ObservationFetcherFragment extends Fragment {
             }
 
             //TODO: CLEANUP PARAMETER PASSING -> doInBackground & -> onPostExecute
-            try {Thread.sleep(5000);}catch(Exception e) {}
+            try {Thread.sleep(1000);}catch(Exception e) {}
 
             Queue<Observation> messages = app[0].getObservationQueue();
             for(Observation o : acq) {
@@ -142,8 +168,12 @@ public class ObservationFetcherFragment extends Fragment {
         protected void onPostExecute(List<Observation> l) {
             Log.d("FetchStationListTask", "Post Execute.");
 
+            //TODO remove progress twirler from UI
+
             networkListener.onRetrievedList();
             //app.setStationLock(false);
+
+            mAsyncTask = null;
 
             //TODO handle runtimeException
         }

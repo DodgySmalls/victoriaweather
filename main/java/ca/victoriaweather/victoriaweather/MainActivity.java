@@ -1,6 +1,8 @@
 package ca.victoriaweather.victoriaweather;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +10,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -19,12 +24,20 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Queue;
 
-public class MainActivity extends AppCompatActivity implements ObservationListFragment.interactionListener, FavouriteListFragment.interactionListener, ObservationFetcherFragment.networkListener {
+public class MainActivity extends AppCompatActivity
+        implements ObservationListFragment.interactionListener,
+                   FavouriteListFragment.interactionListener,
+                   ObservationFetcherFragment.networkListener,
+                   GraphSelectionDialogFragment.interactionListener {
+
     private static final String BUNDLE_FIRST_LOAD = "BUNDLE_FIRST_LOAD";
     private static final String BUNDLE_OBSERVATIONS = "BUNDLE_ALL_OBSERVATIONS";
+    private static final String BUNDLE_PERCEIVED_NETWORKING = "BUNDLE_NETWORK_BOOL";
     private static final String FAVOURITES_FILENAME = "VICTORIAWEATHER_FAVOURITES_LIST";
+
     private ArrayList<Observation> observations;
     private boolean firstLoad = true;
+    private boolean perceivedNetworking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +54,21 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
 
             loadFavourites();
 
-            ObservationFetcherFragment f = new ObservationFetcherFragment();
-            f.execute((WeatherApp)getApplication());
-            getSupportFragmentManager().beginTransaction().add(R.id.actionpanel_reload_pane, f, ObservationFetcherFragment.FM_TAG).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.actionpanel_reload_pane, new ObservationFetcherFragment(), ObservationFetcherFragment.FM_TAG).commit();
+            getSupportFragmentManager().executePendingTransactions();
+            attemptRefresh(null);
         } else {
             observations = Observation.observationsFromBundleArrayList(savedInstanceState.getParcelableArrayList(BUNDLE_OBSERVATIONS));
             firstLoad = savedInstanceState.getBoolean(BUNDLE_FIRST_LOAD);
+            perceivedNetworking = savedInstanceState.getBoolean(BUNDLE_PERCEIVED_NETWORKING);
 
-            checkQueue((WeatherApp)getApplication());
-
-            try {
-                getSupportFragmentManager().beginTransaction().attach(getSupportFragmentManager().findFragmentById(R.id.main_display_frame)).commit();
-            } catch (NullPointerException e) {
-                Log.d("MainActivity", "onCreate(): Had instance state but no fragment associated with 'main_display_frame'");
+            //This may be a non-fatal race condition for UI integrity if android allows onCreate() to be interrupted by AsyncTask onPostExecute()
+            if(perceivedNetworking) {
+                updateNetworkProgress(true);
+            } else {
+                updateNetworkProgress(false);
             }
+            checkQueue((WeatherApp)getApplication());
         }
     }
 
@@ -67,18 +81,32 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        Intent newIntent;
         if (id == R.id.action_settings) {
+            newIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(newIntent);
+            return true;
+        } else if (id == R.id.action_alerts) {
+            newIntent = new Intent(getApplicationContext(), AlertsActivity.class);
+            startActivity(newIntent);
+            return true;
+        } else if (id == R.id.action_about) {
+            newIntent = new Intent(getApplicationContext(), AboutActivity.class);
+            startActivity(newIntent);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         try {
-            savedInstanceState.putBoolean(BUNDLE_FIRST_LOAD, firstLoad);
-            savedInstanceState.putParcelableArrayList(BUNDLE_OBSERVATIONS, Observation.observationsToBundleArrayList(observations));
+            outState.putBoolean(BUNDLE_FIRST_LOAD, firstLoad);
+            outState.putBoolean(BUNDLE_PERCEIVED_NETWORKING, perceivedNetworking);
+            outState.putParcelableArrayList(BUNDLE_OBSERVATIONS, Observation.observationsToBundleArrayList(observations));
         } catch (NullPointerException e) {
             Log.d("MainActivity", "onSaveInstanceState() NullPointerException @observations or @favouriteStrings");
         }
@@ -110,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
         }
     }
 
-    public void onFavouritesListSelected(View v) {
+    public void onFavouritesListSelected(View callingView) {
         FavouriteListFragment fragment = (FavouriteListFragment)getSupportFragmentManager().findFragmentByTag(FavouriteListFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -132,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
         }
     }
 
-    public void onObservationListSelected(View v) {
+    public void onObservationListSelected(View callingView) {
         ObservationListFragment fragment = (ObservationListFragment)getSupportFragmentManager().findFragmentByTag(ObservationListFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -153,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
         }
     }
 
-    public void onMapSelected(View v) {
+    public void onMapSelected(View callingView) {
         GoogleMapFragment fragment = (GoogleMapFragment)getSupportFragmentManager().findFragmentByTag(GoogleMapFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -191,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
 
         firstLoad = false;
         checkQueue((WeatherApp) getApplication());
+        updateNetworkProgress(false);
         try {
             fragment = (ObservationDependentUpdatable)getSupportFragmentManager().findFragmentById(R.id.main_display_frame);
             fragment.updateObservations(Observation.observationsToBundleArrayList(observations));
@@ -198,6 +227,34 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
             Log.d("MainActivity", "onRetrievedList(): NullPointerException");
         } catch (ClassCastException e) {
             Log.d("MainActivity", "onRetrievedList(): ClassCastException (ObservationDependentUpdatable)");
+        }
+
+    }
+
+    public void onFailedToRetrieveList() {
+        //TODO user notification toast ( ^ better args probably after resolving networking error)
+        updateNetworkProgress(false);
+    }
+
+    private void updateNetworkProgress(boolean attempt) {
+        try {
+            ProgressBar networkProgress = (ProgressBar) findViewById(R.id.actionpanel_networking_progressbar);
+            TextView onClickRefresh = (TextView) findViewById(R.id.action_panel_refresh);
+
+            //TODO not sure if this is wasteful (might still be drawing to a view that just isn't displayed?)
+            if(attempt == false) {
+                perceivedNetworking = false;
+                networkProgress.setVisibility(View.GONE);
+                onClickRefresh.setVisibility(View.VISIBLE);
+            } else {
+                perceivedNetworking = true;
+                networkProgress.setVisibility(View.VISIBLE);
+                onClickRefresh.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
+            Log.d("MainActivity", "updateNetworkProgress(): NullPointerException");
+        } catch (ClassCastException e) {
+            Log.d("MainActivity", "updateNetworkProgress(): ClassCastException (ObservationDependentUpdatable)");
         }
 
     }
@@ -218,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
         }
     }
 
-    public void toggleFavouriteFromConditionsFragment(View v) {
+    public void toggleFavouriteFromConditionsFragment(View callingView) {
         try {
             ConditionsFragment fragment = (ConditionsFragment) getSupportFragmentManager().findFragmentByTag(ConditionsFragment.FM_TAG);
             fragment.getObservation();
@@ -352,5 +409,81 @@ public class MainActivity extends AppCompatActivity implements ObservationListFr
         }
     }
 
+    //passes appropriate arguments to a new dialog, which may then call MainActivity.launchWebContent() to put a new activity in the foreground
+    public void showGraphSelectionDialog(View callingView) {
+        Observation targetObs;
+        GraphSelectionDialogFragment dialogFragment;
+        try {
+            ConditionsFragment fragment = (ConditionsFragment) getSupportFragmentManager().findFragmentByTag(ConditionsFragment.FM_TAG);
+            targetObs = fragment.getObservation();
+
+            Bundle dialogArgs = new Bundle();
+            dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_STATION_NAME_TAG, targetObs.getAttribute(Observation.ATTR_NAME));
+
+            switch(callingView.getId()) {
+                case R.id.condition_temperature_row: dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_CONDITION_TAG, GraphSelectionDialogFragment.CONDITION_TEMPERATURE);break;
+                case R.id.condition_average_wind_row:  dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_CONDITION_TAG, GraphSelectionDialogFragment.CONDITION_WIND);break;
+                case R.id.condition_rain_row: dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_CONDITION_TAG, GraphSelectionDialogFragment.CONDITION_RAIN);break;
+                case R.id.condition_pressure_row: dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_CONDITION_TAG, GraphSelectionDialogFragment.CONDITION_PRESSURE);break;
+                case R.id.condition_uv_index_row:  dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_CONDITION_TAG, GraphSelectionDialogFragment.CONDITION_UV_INDEX);break;
+                case R.id.condition_insolation_row:  dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_CONDITION_TAG, GraphSelectionDialogFragment.CONDITION_INSOLATION);break;
+                case R.id.condition_humidity_row:  dialogArgs.putString(GraphSelectionDialogFragment.BUNDLE_CONDITION_TAG, GraphSelectionDialogFragment.CONDITION_HUMIDITY);break;
+                default: Log.d("MainActivity", "showGraphSelectionDialog() could not parse calling view into a condition [" + callingView.getId() + "]");
+                    return;
+            }
+
+            DialogFragment dialog = new GraphSelectionDialogFragment();
+            dialog.setArguments(dialogArgs);
+            dialog.show(getSupportFragmentManager(), GraphSelectionDialogFragment.FM_TAG);
+
+        } catch (NullPointerException e) {
+            Log.d("MainActivity", "showGraphSelectionDialog() null pointer when retrieving");
+        } catch (ClassCastException e) {
+            Log.d("MainActivity", "showGraphSelectionDialog() called but ConditionsFragment could not be retrieved");
+        }
+    }
+
+    public void launchWebContent(String url, String title) {
+        Intent newIntent;
+        newIntent = new Intent(getApplicationContext(), WebContentActivity.class);
+
+        Bundle args = new Bundle();
+        args.putString(WebContentActivity.ARG_TITLE, title);
+        args.putString(WebContentActivity.ARG_URL, url);
+        newIntent.putExtras(args);
+
+        startActivity(newIntent);
+    }
+
+    public void zoomToCurrentStation(View callingView) {
+        try {
+            ConditionsFragment fragment = (ConditionsFragment) getSupportFragmentManager().findFragmentByTag(ConditionsFragment.FM_TAG);
+            Observation currentObs = fragment.getObservation();
+
+            if(currentObs.hasLatLng()) {
+                onMapSelected(null);
+                GoogleMapFragment f = (GoogleMapFragment)getSupportFragmentManager().findFragmentByTag(GoogleMapFragment.FM_TAG);
+                f.moveToLatLng(currentObs.getLatLng());
+            }
+
+        }   catch (NullPointerException e) {
+            Log.d("MainActivity", "toggleFavouriteFromConditionsFragment(): NullPointerException");
+            return;
+        } catch (ClassCastException e) {
+            Log.d("MainActivity", "toggleFavouriteFromConditionsFragment(): ClassCastException (ConditionsFragment)");
+            return;
+        }
+    }
+
+    public void attemptRefresh(View callingView) {
+        try {
+            ObservationFetcherFragment fragment = (ObservationFetcherFragment) getSupportFragmentManager().findFragmentByTag(ObservationFetcherFragment.FM_TAG);
+            if(fragment.execute((WeatherApp)getApplication())) {
+                updateNetworkProgress(true);
+            }
+        } catch (Exception e) {
+            Log.d("MainActivity", "attemptRefresh() refresh attempt failed due to exception");
+        }
+    }
     //TODO @override ondestroy to null references to old lists (several activities/fragments need to stop leaking memory)
 }

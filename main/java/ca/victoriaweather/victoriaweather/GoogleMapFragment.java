@@ -1,5 +1,6 @@
 package ca.victoriaweather.victoriaweather;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ public class GoogleMapFragment extends SupportMapFragment implements Observation
     public static final float DEFAULT_ZOOM = 13;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private GoogleMap.OnInfoWindowClickListener infoClickListener;
 
     public GoogleMapFragment(){
     }
@@ -87,10 +89,23 @@ public class GoogleMapFragment extends SupportMapFragment implements Observation
             if(o.hasLatLng()) {
                 MarkerOptions m = new MarkerOptions();
                 m.position(o.getLatLng());
+                m.title(o.getAttribute(Observation.ATTR_NAME));
+                m.draggable(false);
+                m.flat(false);
+                if(o.hasAttribute(Observation.ATTR_TEMPERATURE)) {
+                    m.snippet("Temperature: " + o.getAttribute(Observation.ATTR_TEMPERATURE) + o.getAttribute(Observation.ATTR_TEMPERATURE_UNIT));
+                }
                 mMap.addMarker(m);
             } else {
                 Log.d("GoogleMapFragment", "reloadPins(): An observation existed without a valid LatLng");
             }
         }
     }
+
+    public void moveToLatLng(LatLng target) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, DEFAULT_ZOOM));
+    }
+
+    //TODO InfoWindow button interactivity http://stackoverflow.com/questions/14123243/google-maps-android-api-v2-interactive-infowindow-like-in-original-android-go/15040761#15040761
+    //ala https://play.google.com/store/apps/details?id=com.circlegate.tt.transit.android
 }

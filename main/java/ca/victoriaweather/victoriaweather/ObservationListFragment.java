@@ -70,24 +70,6 @@ public class ObservationListFragment extends ListFragment implements Observation
     }
 
     @Override
-    public void onStop() {
-        Log.d("ObservationListFragment", "onStop()");
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.d("ObservationListFragment", "onDestroyView()");
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d("ObservationListFragment", "onDestroy()");
-        super.onDestroy();
-    }
-
-    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if (mListener != null) {

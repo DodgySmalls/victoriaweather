@@ -38,8 +38,10 @@
         <activity
             android:name=".WebContentActivity"
             android:label="@string/label_web_content"
-            android:theme="@android:style/Theme.Dialog"
-            android:parentActivityName="ca.victoriaweather.victoriaweather.MainActivity" >
+            android:theme="@style/AppTheme.Dialog"
+            android:minWidth="300dp"
+            android:minHeight="400dp"
+            android:parentActivityName="ca.victoriaweather.victoriaweather.MainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
