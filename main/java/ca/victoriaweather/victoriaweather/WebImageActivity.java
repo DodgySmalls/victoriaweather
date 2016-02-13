@@ -71,9 +71,9 @@ public class WebImageActivity extends AppCompatActivity implements BitmapRetaine
         super.onSaveInstanceState(outState);
     }
 
-    public void onPostExecute(Bitmap result) {
+    public void onPostExecute() {
         ImageView imageView = (ImageView) findViewById(R.id.web_content_main_image);
-        imageView.setImageBitmap(result);
+        imageView.setImageBitmap(mBitmapFragment.getBitmap());
     }
 
     //code thanks to stackoverflow user Kyle Clegg (http://stackoverflow.com/questions/5776851/load-image-from-url)
