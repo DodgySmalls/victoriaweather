@@ -445,11 +445,11 @@ public class MainActivity extends AppCompatActivity
 
     public void launchWebContent(String url, String title) {
         Intent newIntent;
-        newIntent = new Intent(getApplicationContext(), WebContentActivity.class);
+        newIntent = new Intent(getApplicationContext(), WebImageActivity.class);
 
         Bundle args = new Bundle();
-        args.putString(WebContentActivity.ARG_TITLE, title);
-        args.putString(WebContentActivity.ARG_URL, url);
+        args.putString(WebImageActivity.ARG_TITLE, title);
+        args.putString(WebImageActivity.ARG_URL, url);
         newIntent.putExtras(args);
 
         startActivity(newIntent);
@@ -478,12 +478,23 @@ public class MainActivity extends AppCompatActivity
     public void attemptRefresh(View callingView) {
         try {
             ObservationFetcherFragment fragment = (ObservationFetcherFragment) getSupportFragmentManager().findFragmentByTag(ObservationFetcherFragment.FM_TAG);
-            if(fragment.execute((WeatherApp)getApplication())) {
+            if(fragment.execute((WeatherApp) getApplication())) {
                 updateNetworkProgress(true);
             }
         } catch (Exception e) {
             Log.d("MainActivity", "attemptRefresh() refresh attempt failed due to exception");
         }
+    }
+
+    public Bundle shortNameToObservationBundle(String shortName) {
+        for(Observation o : observations) {
+            if(o.hasAttribute(Observation.ATTR_NAME)) {
+                if(o.getAttribute(Observation.ATTR_NAME).equals(shortName)) {
+                    return o.toBundle();
+                }
+            }
+        }
+        return null;
     }
     //TODO @override ondestroy to null references to old lists (several activities/fragments need to stop leaking memory)
 }

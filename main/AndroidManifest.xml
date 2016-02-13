@@ -36,7 +36,7 @@
         </activity>
 
         <activity
-            android:name=".WebContentActivity"
+            android:name=".WebImageActivity"
             android:label="@string/label_web_content"
             android:theme="@style/AppTheme.Dialog"
             android:minWidth="300dp"

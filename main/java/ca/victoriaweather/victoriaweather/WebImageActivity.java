@@ -1,20 +1,18 @@
 package ca.victoriaweather.victoriaweather;
 
+import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import java.io.InputStream;
-import java.net.URL;
+public class WebImageActivity extends AppCompatActivity implements BitmapRetainerFragment.PostExecuteCallback {
+    public static final String ARG_TITLE = "ARG_WEB_IMAGE_ACTIVITY_TITLE";
+    public static final String ARG_URL = "ARG_WEB_IMAGE_ACTIVITY_URL";
 
-public class WebContentActivity extends AppCompatActivity {
-    public static final String ARG_TITLE = "ARG_WEB_CONTENT_ACTIVITY_TITLE";
-    public static final String ARG_URL = "ARG_WEB_CONTENT_ACTIVITY_URL";
+    private BitmapRetainerFragment mBitmapFragment;
 
     //TODO compress bitmap to avoid FAILED BINDER TRANSACTION ->  http://stackoverflow.com/questions/3528735/failed-binder-transaction
 
@@ -23,16 +21,25 @@ public class WebContentActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_content);
+        setContentView(R.layout.activity_web_image);
+
         if(savedInstanceState == null) {
             Bundle args = getIntent().getExtras();
+            mBitmapFragment = new BitmapRetainerFragment();
+            mBitmapFragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction().add(mBitmapFragment, BitmapRetainerFragment.FM_TAG).commit();
             setTitle(args.getString(ARG_TITLE));
-
-            ImageView imageView = (ImageView) findViewById(R.id.web_content_main_image);
-            DownloadImageTask networker = new DownloadImageTask(imageView);
-            networker.execute(args.getString(ARG_URL));
         } else {
-
+            mBitmapFragment = (BitmapRetainerFragment)getSupportFragmentManager().findFragmentByTag(BitmapRetainerFragment.FM_TAG);
+            try {
+                if (mBitmapFragment.getBitmap() != null) {
+                    ImageView imageView = (ImageView) findViewById(R.id.web_content_main_image);
+                    imageView.setImageBitmap(mBitmapFragment.getBitmap());
+                }
+            } catch (NullPointerException e) {
+                Log.d("WebImageActivity", "onCreate() after configuration change there was no BitmapRetainerFragment found by the manager");
+            }
+            setTitle(savedInstanceState.getString(ARG_TITLE));
         }
     }
 
@@ -58,29 +65,16 @@ public class WebContentActivity extends AppCompatActivity {
         getWindow().setAttributes(layout);
     }
 
-    //code thanks to stackoverflow user Kyle Clegg (http://stackoverflow.com/questions/5776851/load-image-from-url)
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+    @Override
+    public void onSaveInstanceState(Bundle outState ) {
+        outState.putString(ARG_TITLE, (String)getTitle());
+        super.onSaveInstanceState(outState);
     }
+
+    public void onPostExecute(Bitmap result) {
+        ImageView imageView = (ImageView) findViewById(R.id.web_content_main_image);
+        imageView.setImageBitmap(result);
+    }
+
+    //code thanks to stackoverflow user Kyle Clegg (http://stackoverflow.com/questions/5776851/load-image-from-url)
 }
