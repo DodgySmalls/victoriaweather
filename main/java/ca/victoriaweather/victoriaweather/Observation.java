@@ -51,6 +51,7 @@ public class Observation {
     public static final String ATTR_STATION_FAULT = "station_fault";
     public static final String ATTR_IS_FAVOURITE = "ATTR_IS_FAVOURITE";
     public static final String HASH_KEYLIST = "observation_keylist";
+    public static final String STATION_DETAILS_URL = "http://www.victoriaweather.ca/station.php?id=";
 
     private HashMap<String, String> attributes;    //named attributes of an observation
     private String id;

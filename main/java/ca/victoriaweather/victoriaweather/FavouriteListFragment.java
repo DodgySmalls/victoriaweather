@@ -53,6 +53,7 @@ public class FavouriteListFragment extends ListFragment implements ObservationDe
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -67,12 +68,6 @@ public class FavouriteListFragment extends ListFragment implements ObservationDe
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d("FavouriteListFragment", "onDestroy()");
-        super.onDestroy();
     }
 
     @Override
@@ -103,6 +98,7 @@ public class FavouriteListFragment extends ListFragment implements ObservationDe
         setListShown(true);
         ((ArrayAdapter)getListAdapter()).notifyDataSetChanged();
     }
+
 
     public interface interactionListener {
         void onObservationSelected(Observation obs);

@@ -19,7 +19,28 @@
     <string name="unit_unavailable">  </string>
     <string name="conditions_toggle_favourite">+fav</string>
     <string name="conditions_map_bridge_text">go to</string>
+    <string name="conditions_web_details_button">details</string>
     <string name="google_maps_key">AIzaSyAwtKHuov6BDkMU19Yg5TlcFxD8_a1qIX0</string>
 
+    <string name="web_image_err">Unfortunately the corresponding graph could not be retrieved from the server.\r\n\r\nPlease try again later.</string>
 
+    <string name="about_network_title">Network Info</string>
+    <string name="about_network_about_details">(Full Details)</string>
+    <string name="about_network_variables">Variables we measure</string>
+
+    <string name="about_blurb">
+        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nFind a bug? Want a feature? Send reports/requests to (vanisle@email.web)\nOr fork the repo yourself:\ngithub.com/DodgySmalls/victoriaweather
+    </string>
+
+    <string name="about_blurb_land">
+        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nFind a bug? Want a feature?\nSend reports/requests to (vanisle@email.web)\nOr fork the repo yourself:\ngithub.com/DodgySmalls/victoriaweather
+    </string>
+
+    <string name="about_connect_title">Connect</string>
+    <string name="about_connect_website">Website: victoriaweather.ca</string>
+    <string name="about_connect_email">Email: weather@uvic.ca</string>
+    <string name="about_connect_facebook">Facebook: facebook.com/victoriaweather</string>
+    <string name="about_connect_twitter">Twitter @vanisleweather</string>
+
+    <string name="about_version">Island Weather (BETA) Version 0.1</string>
 </resources>

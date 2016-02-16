@@ -181,18 +181,21 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:id="@+id/conditions_toggle_fav"
             android:text="@string/conditions_toggle_favourite"
             android:onClick="toggleFavouriteFromConditionsFragment" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:id="@+id/conditions_map_bridge_button"
             android:text="@string/conditions_map_bridge_text"
             android:onClick="zoomToCurrentStation" />
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/conditions_web_details_button"
+            android:text="@string/conditions_web_details_button"
+            android:onClick="openCurrentStationBrowser" />
     </LinearLayout>
 
 </LinearLayout>

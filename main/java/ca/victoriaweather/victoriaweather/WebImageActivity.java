@@ -1,22 +1,21 @@
 package ca.victoriaweather.victoriaweather;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class WebImageActivity extends AppCompatActivity implements BitmapRetainerFragment.PostExecuteCallback {
     public static final String ARG_TITLE = "ARG_WEB_IMAGE_ACTIVITY_TITLE";
     public static final String ARG_URL = "ARG_WEB_IMAGE_ACTIVITY_URL";
+    private static final String ERR_KEY = "WEB_IMAGE_ACTIVITY_ERR";
 
+    private boolean mErr = false;
     private BitmapRetainerFragment mBitmapFragment;
-
-    //TODO compress bitmap to avoid FAILED BINDER TRANSACTION ->  http://stackoverflow.com/questions/3528735/failed-binder-transaction
-
-    //TODO save title modification, url, and bitmap across configuration changes
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,10 +29,11 @@ public class WebImageActivity extends AppCompatActivity implements BitmapRetaine
             getSupportFragmentManager().beginTransaction().add(mBitmapFragment, BitmapRetainerFragment.FM_TAG).commit();
             setTitle(args.getString(ARG_TITLE));
         } else {
+            mErr = savedInstanceState.getBoolean(ERR_KEY);
             mBitmapFragment = (BitmapRetainerFragment)getSupportFragmentManager().findFragmentByTag(BitmapRetainerFragment.FM_TAG);
             try {
                 if (mBitmapFragment.getBitmap() != null) {
-                    ImageView imageView = (ImageView) findViewById(R.id.web_content_main_image);
+                    ImageView imageView = (ImageView) findViewById(R.id.web_image_main);
                     imageView.setImageBitmap(mBitmapFragment.getBitmap());
                 }
             } catch (NullPointerException e) {
@@ -41,11 +41,16 @@ public class WebImageActivity extends AppCompatActivity implements BitmapRetaine
             }
             setTitle(savedInstanceState.getString(ARG_TITLE));
         }
+
+        if(!mErr) {
+            TextView errText = (TextView) findViewById(R.id.web_image_err_text);
+            errText.setVisibility(View.GONE);
+        }
     }
 
     //TODO see if meta can be changed based on settings to allow users to avoid dialogs
 
-    //http://stackoverflow.com/questions/25856303/narrow-dialog-when-starting-new-activity-in-theme-holo-dialogwhenlarge-mode
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -68,13 +73,22 @@ public class WebImageActivity extends AppCompatActivity implements BitmapRetaine
     @Override
     public void onSaveInstanceState(Bundle outState ) {
         outState.putString(ARG_TITLE, (String)getTitle());
+        outState.putBoolean(ERR_KEY, mErr);
         super.onSaveInstanceState(outState);
     }
 
     public void onPostExecute() {
-        ImageView imageView = (ImageView) findViewById(R.id.web_content_main_image);
-        imageView.setImageBitmap(mBitmapFragment.getBitmap());
+        ImageView imageView = (ImageView) findViewById(R.id.web_image_main);
+        Bitmap bmp = mBitmapFragment.getBitmap();
+        if(bmp != null) {
+            imageView.setImageBitmap(bmp);
+        } else {
+            TextView errText = (TextView) findViewById(R.id.web_image_err_text);
+            mErr = true;
+            errText.setVisibility(View.VISIBLE);
+        }
     }
 
-    //code thanks to stackoverflow user Kyle Clegg (http://stackoverflow.com/questions/5776851/load-image-from-url)
+    //Activity -> dialog code thanks to stackoverflow user Kyle Clegg (http://stackoverflow.com/questions/5776851/load-image-from-url)
+    //http://stackoverflow.com/questions/25856303/narrow-dialog-when-starting-new-activity-in-theme-holo-dialogwhenlarge-mode
 }

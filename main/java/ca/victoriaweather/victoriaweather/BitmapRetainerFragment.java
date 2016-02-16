@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
 import android.util.Log;
-import android.widget.ImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 //Design pattern (nice if you want a more general implementation of asynctask callbacks tied to an activity):
@@ -40,8 +38,8 @@ public class BitmapRetainerFragment extends Fragment {
         // int in its constructor.
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
-        // Use 1/8th of the available memory for this memory cache.
-        final int cacheSize = maxMemory / 8;
+        // Use 1/16th of the available memory for this memory cache. (the graphs we are hosting are generally quite small, around 5-20kb even as PNGs)
+        final int cacheSize = maxMemory / 16;
 
         mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
@@ -76,10 +74,14 @@ public class BitmapRetainerFragment extends Fragment {
         return mMemoryCache.get(LRU_BMP_KEY);
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private class DownloadImageTask extends AsyncTask<String, Void, String> {
         public DownloadImageTask() {}
 
-        protected Bitmap doInBackground(String... urls) {
+        protected void onPreExecute() {
+            mMemoryCache.remove(LRU_BMP_KEY);
+        }
+
+        protected String doInBackground(String... urls) {
             String urldisplay = urls[0];
             Bitmap bmp = null;
             try {
@@ -90,13 +92,19 @@ public class BitmapRetainerFragment extends Fragment {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-            try{Thread.sleep(2000);}catch(Exception e) {}
-            return bmp;
+
+            if(bmp !=  null) {
+                mMemoryCache.put(LRU_BMP_KEY, bmp); //Doing this synchronously in onPostExecute would be wise, this was part of a test to discern the cause of a failed binder transaction
+            }
+            return null;
         }
 
-        protected void onPostExecute(Bitmap result) {
-            mMemoryCache.put(LRU_BMP_KEY, result);
-            mCallbacks.onPostExecute();
+        protected void onPostExecute(String nullStrTest) {
+            try {
+                mCallbacks.onPostExecute();
+            } catch (NullPointerException e) {
+                Log.d("BitmapRetainerFragment", "onPostExecute() after fetching web content, the user navigated away from the WebImageActivity");
+            }
         }
     }
 }

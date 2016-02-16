@@ -2,6 +2,7 @@ package ca.victoriaweather.victoriaweather;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity
     private boolean firstLoad = true;
     private boolean perceivedNetworking = false;
 
+
+    //TODO avoid FAILED BINDER TRANSACTION
+    // Upon further investigation the cause of this failure is partially uncertain but is correlated to the onSaveInstanceState() of main activity
+    // (Doesn't occur with a small observationlist)
+    // My guess is that activities which are created infront of this do not receive complete information about this activity's instancestate, but that is entirely irrelevant
+    // No negative consequences have been observed
+    // (Pending further investigation)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +70,6 @@ public class MainActivity extends AppCompatActivity
             firstLoad = savedInstanceState.getBoolean(BUNDLE_FIRST_LOAD);
             perceivedNetworking = savedInstanceState.getBoolean(BUNDLE_PERCEIVED_NETWORKING);
 
-            //This may be a non-fatal race condition for UI integrity if android allows onCreate() to be interrupted by AsyncTask onPostExecute()
             if(perceivedNetworking) {
                 updateNetworkProgress(true);
             } else {
@@ -103,6 +110,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.d("MainActivity", "onSaveInstanceState()");
         try {
             outState.putBoolean(BUNDLE_FIRST_LOAD, firstLoad);
             outState.putBoolean(BUNDLE_PERCEIVED_NETWORKING, perceivedNetworking);
@@ -191,11 +199,11 @@ public class MainActivity extends AppCompatActivity
             transaction.detach(getSupportFragmentManager().findFragmentById(R.id.main_display_frame));
             transaction.add(R.id.main_display_frame, fragment, GoogleMapFragment.FM_TAG);
         } else {
-
-            //TODO don't detach + attach if mapFragment is already in main_display_frame (maybe for other frags as well, but most important since mapFragment glitches graphically when you do this)
             Log.d("MainActivity", "onMapSelected(): Found a fragment with tag \"" + GoogleMapFragment.FM_TAG + "\"");
-            transaction.detach(getSupportFragmentManager().findFragmentById(R.id.main_display_frame));
-            transaction.attach(fragment);
+            if(!(GoogleMapFragment.FM_TAG.equals(getSupportFragmentManager().findFragmentById(R.id.main_display_frame).getTag()))) {
+                transaction.detach(getSupportFragmentManager().findFragmentById(R.id.main_display_frame));
+                transaction.attach(fragment);
+            }
         }
         transaction.commit();
         if(observations.size() > 0 && !firstLoad) {
@@ -474,6 +482,23 @@ public class MainActivity extends AppCompatActivity
             return;
         }
     }
+
+    public void openCurrentStationBrowser(View v) {
+        try {
+            ConditionsFragment fragment = (ConditionsFragment) getSupportFragmentManager().findFragmentByTag(ConditionsFragment.FM_TAG);
+            Observation currentObs = fragment.getObservation();
+
+            startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(Observation.STATION_DETAILS_URL + currentObs.getId())));
+
+        }   catch (NullPointerException e) {
+            Log.d("MainActivity", "toggleFavouriteFromConditionsFragment(): NullPointerException");
+            return;
+        } catch (ClassCastException e) {
+            Log.d("MainActivity", "toggleFavouriteFromConditionsFragment(): ClassCastException (ConditionsFragment)");
+            return;
+        }
+    }
+
 
     public void attemptRefresh(View callingView) {
         try {

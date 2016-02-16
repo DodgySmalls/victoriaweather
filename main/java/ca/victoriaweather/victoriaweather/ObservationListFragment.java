@@ -92,6 +92,7 @@ public class ObservationListFragment extends ListFragment implements Observation
         ((ArrayAdapter)getListAdapter()).notifyDataSetChanged();
     }
 
+
     public interface interactionListener {
         void onObservationSelected(Observation obs);
     }

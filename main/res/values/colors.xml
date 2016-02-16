@@ -12,4 +12,8 @@
     <color name="yellow">#ffff00</color>
 
     <color name="condition_row_background">#FFFFAA</color>
+
+    <color name="weblink">#5555DD</color>
+
+    <color name="text_dark">#FF111111</color>
 </resources>

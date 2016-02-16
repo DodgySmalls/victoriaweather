@@ -2,6 +2,89 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin">
 
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_network_title"
+            android:id="@+id/about_network_title"
+            style="@style/TextView_About_Title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_blurb"
+            android:gravity="center_horizontal"
+            android:id="@+id/about_blurb"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_network_about_details"
+            android:id="@+id/about_network_about_details"
+            android:gravity="center_horizontal"
+            style="@style/TextView_Weblink"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_network_variables"
+            android:id="@+id/about_network_variables"
+            android:gravity="center_horizontal"
+            style="@style/TextView_Weblink"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_connect_title"
+            android:id="@+id/about_connect_title"
+            style="@style/TextView_About_Title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_connect_website"
+            android:id="@+id/about_connect_website"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_connect_email"
+            android:id="@+id/about_connect_email"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_connect_facebook"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_connect_twitter"
+            android:id="@+id/about_connect_twitter"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about_version"
+        android:id="@+id/about_version"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:gravity="center"/>
 </LinearLayout>

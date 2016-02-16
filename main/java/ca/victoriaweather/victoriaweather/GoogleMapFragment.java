@@ -70,7 +70,7 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
-                Observation parentObs = Observation.fromBundle(((MainActivity)getActivity()).shortNameToObservationBundle(marker.getTitle()));
+                Observation parentObs = Observation.fromBundle(((MainActivity) getActivity()).shortNameToObservationBundle(marker.getTitle()));
                 ((MainActivity)getActivity()).onObservationSelected(parentObs);
             }
         };
