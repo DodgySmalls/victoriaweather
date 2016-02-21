@@ -121,8 +121,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onObservationSelected(Observation observation) {
-
-        //TODO Display conditions fragment with observation
         ConditionsFragment fragment = (ConditionsFragment)getSupportFragmentManager().findFragmentByTag(ConditionsFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 

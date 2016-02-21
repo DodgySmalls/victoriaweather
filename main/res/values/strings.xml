@@ -29,11 +29,11 @@
     <string name="about_network_variables">Variables we measure</string>
 
     <string name="about_blurb">
-        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nFind a bug? Want a feature? Send reports/requests to (vanisle@email.web)\nOr fork the repo yourself:\ngithub.com/DodgySmalls/victoriaweather
+        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nFind a bug? Want a feature? Send reports/requests to: vancouverislandweather@gmail.com\nOr fork the repo yourself:\ngithub.com/DodgySmalls/victoriaweather
     </string>
 
     <string name="about_blurb_land">
-        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nFind a bug? Want a feature?\nSend reports/requests to (vanisle@email.web)\nOr fork the repo yourself:\ngithub.com/DodgySmalls/victoriaweather
+        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nFind a bug? Want a feature?\nSend reports/requests to: vancouverislandweather@gmail.com\nOr fork the repo yourself:\ngithub.com/DodgySmalls/victoriaweather
     </string>
 
     <string name="about_connect_title">Connect</string>
@@ -43,4 +43,11 @@
     <string name="about_connect_twitter">Twitter @vanisleweather</string>
 
     <string name="about_version">Island Weather (BETA) Version 0.1</string>
+
+    <string name="pref_sync">pref_sync</string>
+    <string name="pref_sync_summ">pref_sync_summ</string>
+    <string name="pref_syncConnectionType">pref_syncConnectionType</string>
+    <string name="pref_syncConnectionTypes_default">pref_syncConnectionType_default</string>
+
+
 </resources>

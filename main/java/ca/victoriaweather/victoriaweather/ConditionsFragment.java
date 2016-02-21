@@ -151,7 +151,6 @@ public class ConditionsFragment extends Fragment implements ObservationDependent
         }
     }
 
-    //TODO save observation through savedInstanceState (onCreate() & onSaveInstanceState())
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

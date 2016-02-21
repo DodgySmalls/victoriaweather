@@ -23,13 +23,13 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void onClick(View view) {
-        String urlStr = "http://www.google.com";
+        String urlStr = "http://www.victoriaweather.ca";
         switch(view.getId()) {
             case R.id.about_network_about_details: urlStr = "http://www.victoriaweather.ca/about.php";
                                                    break;
             case R.id.about_network_variables:     urlStr = "http://www.victoriaweather.ca/information.php";
                                                    break;
-            default: //if you got google we dun goofed
+            default:
                 break;
         }
         startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(urlStr)));
