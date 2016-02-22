@@ -17,6 +17,7 @@ public class AlertListFragment extends ListFragment {
     }
 
     private class AlertFetcherTask extends AsyncTask<String, Void, List<Alert>> {
+        //TODO SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         protected List<Alert> doInBackground(String... params) {
             ArrayList<Alert> aList = new ArrayList<Alert>();
 

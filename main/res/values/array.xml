@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_syncConnectionOptions">
+        <item>Only on wifi</item>
+        <item>Any network</item>
+    </array>
+    <array name="pref_vals_syncConnectionOptions">
+        <item>wifi</item>
+        <item>all</item>
+    </array>
+
+
+</resources>

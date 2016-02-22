@@ -75,6 +75,8 @@ public class BitmapRetainerFragment extends Fragment {
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, String> {
+        //TODO SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
         public DownloadImageTask() {}
 
         protected void onPreExecute() {

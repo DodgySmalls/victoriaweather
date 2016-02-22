@@ -2,46 +2,51 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/control_bar"
-    android:layout_width="wrap_content"
+    android:layout_width="@dimen/actionpanel_span"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@color/black">
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/action_panel_1"
         android:onClick="onFavouritesListSelected" />
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/action_panel_2"
         android:onClick="onObservationListSelected" />
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/action_panel_3"
-        android:onClick="onMapSelected" />
+        android:onClick="onMapSelected"
+        android:paddingBottom="@dimen/actionpanel_refresh_padding"/>
 
     <FrameLayout
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/actionpanel_reload_pane"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:layout_width="match_parent"
+        android:id="@+id/actionpanel_reload_pane">
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity="center"
             android:textColor="@color/grey_font"
             android:text="@string/action_panel_refresh_button"
             android:id="@+id/action_panel_refresh"
             android:onClick="attemptRefresh"/>
 
         <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            style="@android:style/Widget.ProgressBar"
+            android:paddingBottom="@dimen/actionpanel_progress_padding"
+            android:paddingTop="@dimen/actionpanel_progress_padding"
+            android:paddingLeft="@dimen/actionpanel_progress_padding"
+            android:paddingRight="@dimen/actionpanel_progress_padding"
             android:id="@+id/actionpanel_networking_progressbar"/>
     </FrameLayout>
 </LinearLayout>

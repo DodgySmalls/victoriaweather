@@ -2,9 +2,11 @@ package ca.victoriaweather.victoriaweather;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,8 +59,7 @@ public class MainActivity extends AppCompatActivity
 
             checkQueue((WeatherApp) getApplication());
 
-            ObservationListFragment tempref;
-            getSupportFragmentManager().beginTransaction().add(R.id.main_display_frame, tempref = ObservationListFragment.newInstanceOf(), ObservationListFragment.FM_TAG).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.main_display_frame, ObservationListFragment.newInstanceOf(), ObservationListFragment.FM_TAG).commit();
 
             loadFavourites();
 
@@ -247,8 +248,12 @@ public class MainActivity extends AppCompatActivity
             ProgressBar networkProgress = (ProgressBar) findViewById(R.id.actionpanel_networking_progressbar);
             TextView onClickRefresh = (TextView) findViewById(R.id.action_panel_refresh);
 
+            //Gross that we set the tint every time we update the ui but on older API versions xml cannot be used to specify parameters, cleaner than loads of resource-vXX files
+            //This also applies the accent to the drawable meaning all other progress bars which reference this drawable will receive this tint
+            networkProgress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this.getApplicationContext(), R.color.theme_gold), PorterDuff.Mode.MULTIPLY);
+
             //TODO not sure if this is wasteful (might still be drawing to a view that just isn't displayed?)
-            if(attempt == false) {
+            if(!attempt) {
                 perceivedNetworking = false;
                 networkProgress.setVisibility(View.GONE);
                 onClickRefresh.setVisibility(View.VISIBLE);
@@ -503,6 +508,8 @@ public class MainActivity extends AppCompatActivity
             ObservationFetcherFragment fragment = (ObservationFetcherFragment) getSupportFragmentManager().findFragmentByTag(ObservationFetcherFragment.FM_TAG);
             if(fragment.execute((WeatherApp) getApplication())) {
                 updateNetworkProgress(true);
+            } else {
+                Log.d("MainActivity", "attemptRefresh() did not fire due to internal logic");
             }
         } catch (Exception e) {
             Log.d("MainActivity", "attemptRefresh() refresh attempt failed due to exception");

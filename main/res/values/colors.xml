@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="theme_blue">#1c5393</color>
+    <color name="theme_gold">#f7bf37</color>
+    <color name="theme_default_bg">#FFDDDDDD</color>
+    <color name="preference_fallback_accent_color">@color/theme_gold</color>
+
+    <color name="actionpanel_button_press_bg">#3583de</color>
+    <color name="actionpanel_button_focus_bg">@color/theme_blue</color>
+    <color name="actionpanel_button_bg">@color/theme_blue</color>
+    <color name="actionpanel_button_press_outline">@color/theme_gold</color>
+    <color name="actionpanel_button_font">@color/light_font</color>
+    <color name="actionpanel_button_press_font">@color/white</color>
+    <color name="actionpanel_button_ripple">@color/actionpanel_button_press_bg</color>
+
     <color name="text_shadow_white">#FFFFFF</color>
     <color name="light_font">#FBFBFB</color>
     <color name="grey">#AAAAAA</color>
@@ -10,10 +23,11 @@
     <color name="green">#328832</color>
     <color name="red">#ff0000</color>
     <color name="yellow">#ffff00</color>
+    <color name="white">#ffffff</color>
 
     <color name="condition_row_background">#FFFFAA</color>
 
-    <color name="weblink">#5555DD</color>
+    <color name="weblink">#1c5393</color>
 
     <color name="text_dark">#FF111111</color>
 </resources>

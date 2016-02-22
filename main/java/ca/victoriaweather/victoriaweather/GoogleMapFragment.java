@@ -115,7 +115,8 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
         if(mMapView == null) {
             mMapView = new MapView(getActivity());
             mMapView.onCreate(savedInstanceState);
-            //mMapView.getMapAsync(this);
+            //TODO: mMapView.getMapAsync(this);
+            //TODO: wrapper function for getMapAsync that checks if network state will be okay with using data
             mMap = mMapView.getMap();
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);

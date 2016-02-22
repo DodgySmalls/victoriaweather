@@ -3,4 +3,23 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_about_land_midgap">16dp</dimen>
+    <dimen name="activity_about_textview_vertical_padding">16dp</dimen>
+
+    <dimen name="actionpanel_button_fontsize">20sp</dimen>
+    <dimen name="actionpanel_progress_padding">5dp</dimen>
+    <dimen name="actionpanel_span">80dp</dimen>
+    <dimen name="actionpanel_refresh_padding">10dp</dimen>
+    <!-- Default insets (outer padding) around buttons -->
+    <dimen name="button_inset_vertical_material">6dp</dimen>
+    <dimen name="button_inset_horizontal_material">@dimen/control_inset_material</dimen>
+    <!-- Default inner padding within buttons -->
+    <dimen name="button_padding_vertical_material">@dimen/control_padding_material</dimen>
+    <dimen name="button_padding_horizontal_material">8dp</dimen>
+
+    <!-- Default insets (outer padding) around controls -->
+    <dimen name="control_inset_material">4dp</dimen>
+    <!-- Default inner padding within controls -->
+    <dimen name="control_padding_material">4dp</dimen>
+    <!-- Default rounded corner for controls -->
+    <dimen name="control_corner_material">2dp</dimen>
 </resources>

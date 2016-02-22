@@ -53,6 +53,8 @@
             android:label="@string/label_settings"
             android:parentActivityName="ca.victoriaweather.victoriaweather.MainActivity" >
 
+            <uses-permission android:name="android.permission.ACTION_MANAGE_NETWORK_USAGE" />
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.victoriaweather.victoriaweather.MainActivity" />

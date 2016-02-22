@@ -44,9 +44,9 @@ public class ObservationFetcherFragment extends Fragment {
         Log.d("ObservationFetcher", "execution attempt");
 
         //An interrupt after this comparison but before the next line would be a race condition in concurrent code.
-        // However, in android's threading model these calls will, ostensibly, only be generated on the UI thread sequentially.
+        // However, in android's threading model these calls will, ostensibly, only be generated on the UI thread
         // Even if they are not, allowing multiple asynctasks to exist will only potentially damage the UI (and be computationally wasteful)
-        // internal data structures can handle any number of threads
+        // internal data structures can handle multiple threads, which all interface with a blocking queue
         if(mAsyncTask == null) {
             (mAsyncTask = new FetchObservationListTask()).execute(app);
 
@@ -97,6 +97,9 @@ public class ObservationFetcherFragment extends Fragment {
         }
 
         //TODO have seen this exception a few times: SAXParseException
+        //TODO EXCEPTIONjava.net.UnknownHostException (when no network available)
+
+        //TODO: SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         //currently priority isn't used and the whole list is always updated
         protected List<Observation> doInBackground(WeatherApp... app) {
