@@ -3,6 +3,7 @@ package ca.victoriaweather.victoriaweather;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,10 +64,15 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
         mInfoWindow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.layout_infowindow, null);
         Button infoButton = (Button)(mInfoWindow.findViewById(R.id.infowindow_button));
         // Setting custom OnTouchListener which deals with the pressed state
-        mInfoButtonListener = new OnInfoWindowElemTouchListener(infoButton,
+        /*mInfoButtonListener = new OnInfoWindowElemTouchListener(infoButton,
                 getResources().getDrawable(R.drawable.common_signin_btn_icon_light),
                 getResources().getDrawable(R.drawable.common_signin_btn_icon_dark))
+        {*/
+        mInfoButtonListener = new OnInfoWindowElemTouchListener(infoButton,
+                ContextCompat.getDrawable(this.getActivity().getApplicationContext(), R.drawable.themed_actionpanel_button),
+                ContextCompat.getDrawable(this.getActivity().getApplicationContext(), R.drawable.themed_actionpanel_button_presscrop))
         {
+
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
@@ -144,7 +150,11 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
 
                         // We must call this to set the current marker and infoWindow references
                         // to the GoogleMapWrapperLayout
-                        mMapLayout.setMarkerWithInfoWindow(marker, mInfoWindow);
+                        /** the empty try catch block protects a corner case where the view is being touched during configuration change,
+                         * I don't think a null pointer can occur in an scenario where the view is accessible, it will always be reconstructed properly before presenting
+                         * **/
+                        try{mMapLayout.setMarkerWithInfoWindow(marker, mInfoWindow);}catch(NullPointerException e){}
+
                         return mInfoWindow;
                     }
                 });

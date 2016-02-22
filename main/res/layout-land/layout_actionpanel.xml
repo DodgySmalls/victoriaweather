@@ -29,15 +29,6 @@
         android:layout_width="match_parent"
         android:id="@+id/actionpanel_reload_pane">
 
-        <TextView
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:textColor="@color/grey_font"
-            android:text="@string/action_panel_refresh_button"
-            android:id="@+id/action_panel_refresh"
-            android:onClick="attemptRefresh"/>
-
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,5 +39,15 @@
             android:paddingLeft="@dimen/actionpanel_progress_padding"
             android:paddingRight="@dimen/actionpanel_progress_padding"
             android:id="@+id/actionpanel_networking_progressbar"/>
+
+        <TextView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/grey_font"
+            android:text="@string/action_panel_refresh_button"
+            android:id="@+id/action_panel_refresh"
+            android:onClick="attemptRefresh"/>
     </FrameLayout>
 </LinearLayout>

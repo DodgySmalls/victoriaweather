@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Networking">
+        <!-- TODO List preference styling, custom class -->
         <ListPreference
             android:key="pref_syncConnectionType"
             android:title="@string/pref_syncConnectionType"
@@ -9,13 +10,29 @@
             android:entries="@array/pref_syncConnectionOptions"
             android:entryValues="@array/pref_vals_syncConnectionOptions"
             android:defaultValue="@string/pref_default_syncConnectionType" />
+
+        <CheckBoxPreference
+            android:key="pref_locationEnabled"
+            android:title="@string/pref_locationEnabled"
+            android:summary="@string/pref_summary_location"
+            android:defaultValue="true" />
+
     </PreferenceCategory>
     <PreferenceCategory android:title="Appearance">
         <CheckBoxPreference
-            android:key="pref_sync"
-            android:title="@string/pref_sync"
-            android:summary="@string/pref_sync_summ"
+            android:key="pref_mapColourfulMarkers"
+            android:title="@string/pref_mapColourfulMarkers"
+            android:summary="@string/pref_summary_mapColourfulMarkers"
             android:defaultValue="true" />
+
+        <MultiSelectListPreference
+            android:key="pref_mapFastInfo"
+            android:title="@string/pref_mapFastInfo"
+            android:dialogTitle="@string/pref_mapFastInfo"
+            android:summary="@string/not_yet_implemented"
+            android:entries="@array/pref_mapFastInfo"
+            android:entryValues="@array/pref_vals_mapFastInfo"
+            android:defaultValue="@array/pref_default_mapFastInfo"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

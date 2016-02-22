@@ -49,10 +49,17 @@
     <string name="about_repo_url">github.com/DodgySmalls/victoriaweather</string>
     <string name="about_version">Island Weather (BETA) Version 0.1</string>
 
-    <!-- PREFERENCE-->
-    <string name="pref_sync">pref_sync</string>
-    <string name="pref_sync_summ">pref_sync_summ</string>
+    <string name="infowindow_button">details</string>
 
+    <string name="not_yet_implemented">(feature coming soon)</string>
+    <!-- PREFERENCE-->
+    <string name="pref_locationEnabled">Use my location</string>
+    <string name="pref_summary_location">Allows finding closest station and other features.</string>
+
+    <string name="pref_mapFastInfo">Show conditions on map popups</string>
+
+    <string name="pref_mapColourfulMarkers">Colourful map markers</string>
+    <string name="pref_summary_mapColourfulMarkers">Changes the colours of map markers by station temperature.</string>
     <string name="pref_syncConnectionType">Network Access</string>
     <string name="pref_default_syncConnectionType">wifi</string>
     <string name="pref_summary_syncConnectionType">Restricts data usage.</string>

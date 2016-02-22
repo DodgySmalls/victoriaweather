@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="theme_blue">#1c5393</color>
+    <color name="theme_blue_dark">#194981</color>
     <color name="theme_gold">#f7bf37</color>
     <color name="theme_default_bg">#FFDDDDDD</color>
     <color name="preference_fallback_accent_color">@color/theme_gold</color>

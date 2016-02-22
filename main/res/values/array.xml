@@ -9,5 +9,17 @@
         <item>all</item>
     </array>
 
-
+    <array name="pref_mapFastInfo">
+        <item>temperature</item>
+        <item>rainfall</item>
+        <item>wind</item>
+    </array>
+    <array name="pref_vals_mapFastInfo">
+        <item>temp</item>
+        <item>rain</item>
+        <item>wind</item>
+    </array>
+    <array name="pref_default_mapFastInfo">
+        <item>temp</item>
+    </array>
 </resources>
