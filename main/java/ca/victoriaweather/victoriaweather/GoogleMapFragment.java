@@ -111,6 +111,7 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
         Log.d("GoogleMapFragment", "onSaveInstanceState()");
     }
 
+    //TODO pref: map marker colours
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);

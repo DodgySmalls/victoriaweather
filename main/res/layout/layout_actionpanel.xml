@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/black">
+    android:background="@color/theme_blue">
 
     <Button
         android:layout_width="0dp"
@@ -34,11 +34,9 @@
         android:id="@+id/actionpanel_reload_pane"
         android:layout_weight="1">
 
-        <TextView
+        <Button
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:textColor="@color/grey_font"
             android:text="@string/action_panel_refresh_button"
             android:id="@+id/action_panel_refresh"
             android:onClick="attemptRefresh"/>
