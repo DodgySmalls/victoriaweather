@@ -109,7 +109,8 @@ public class ObservationFetcherFragment extends Fragment {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-                publishProgress("Input stream opened"); Log.d("FetchStationListTask", "Fetched XML");
+                publishProgress("Input stream opened");
+                Log.d("FetchStationListTask", "Fetched XML");
 
                 DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder;
