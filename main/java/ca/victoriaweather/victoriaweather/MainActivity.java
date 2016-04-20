@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         } catch (NullPointerException e) {
             Log.d("MainActivity", "onSaveInstanceState() NullPointerException @observations or @favouriteStrings");
         }
+        Log.d("MainActivity", "ret onSaveInstanceState()");
     }
 
     public void onObservationSelected(Observation observation) {

@@ -22,4 +22,7 @@
     <dimen name="control_padding_material">4dp</dimen>
     <!-- Default rounded corner for controls -->
     <dimen name="control_corner_material">2dp</dimen>
+
+    <dimen name="fragment_conditions_unit_left_padding">5dp</dimen>
+    <dimen name="fragment_conditions_outer_padding">15dp</dimen>
 </resources>

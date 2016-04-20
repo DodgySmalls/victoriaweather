@@ -56,7 +56,6 @@
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_temperature_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
@@ -75,7 +74,6 @@
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_average_wind_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
@@ -96,7 +94,6 @@
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_rain_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
@@ -116,7 +113,6 @@
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_pressure_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
@@ -136,7 +132,6 @@
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_uv_index_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
@@ -156,7 +151,6 @@
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_insolation_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right">
@@ -176,7 +170,6 @@
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_humidity_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >

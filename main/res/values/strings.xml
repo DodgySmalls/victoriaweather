@@ -16,10 +16,20 @@
     <string name="action_panel_refresh_button">Refresh</string>
 
     <string name="condition_unavailable">unavailable</string>
+    <string name="condition_time_unavailable">Could not contact station.</string>
     <string name="unit_unavailable">  </string>
-    <string name="conditions_toggle_favourite">+fav</string>
+    <string name="conditions_toggle_favourite"></string>
     <string name="conditions_map_bridge_text">go to</string>
     <string name="conditions_web_details_button">details</string>
+
+    <string name="conditions_temperature">Temperature</string>
+    <string name="conditions_average_wind">Average Wind</string>
+    <string name="conditions_rain">Rain</string>
+    <string name="conditions_pressure">Pressure</string>
+    <string name="conditions_uv">UV Index</string>
+    <string name="conditions_insolation">Insolation</string>
+    <string name="conditions_humidity">Humidity</string>
+
     <string name="google_maps_key">AIzaSyAwtKHuov6BDkMU19Yg5TlcFxD8_a1qIX0</string>
 
     <string name="web_image_err">Unfortunately the corresponding graph could not be retrieved from the server.\n\nPlease try again later.</string>

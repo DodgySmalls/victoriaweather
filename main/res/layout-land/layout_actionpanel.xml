@@ -5,7 +5,7 @@
     android:layout_width="@dimen/actionpanel_span"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/theme_blue">
+    android:background="@color/black">
 
     <Button
         android:layout_width="match_parent"

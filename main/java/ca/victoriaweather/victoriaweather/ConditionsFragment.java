@@ -2,6 +2,7 @@ package ca.victoriaweather.victoriaweather;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,15 +78,21 @@ public class ConditionsFragment extends Fragment implements ObservationDependent
             Button fav = (Button)(currentView.findViewById(R.id.conditions_toggle_fav));
 
             if(observation.isFavourite()) {
-                fav.setText("-fav");
+                fav.setBackgroundResource(R.drawable.btn_unfavourite);
             } else {
-                fav.setText("+fav");
+                fav.setBackgroundResource(R.drawable.btn_favourite);
             }
 
+
+
             title.setText(observation.getAttribute(Observation.ATTR_NAME_LONG));
+            //TODO: Preference->auto scroll and enable touch marquee?
+            title.setSelected(true);
 
             if(observation.hasAttribute(Observation.ATTR_TEMPERATURE)) {
+                currentView.findViewById(R.id.condition_temperature_row).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_default_bg));
                 temperature.setText(observation.getAttribute(Observation.ATTR_TEMPERATURE));
+                temperature.setTextColor(ContextCompat.getColor(getContext(), R.color.text_dark));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
                     temperatureUnit.setText(observation.getAttribute(Observation.ATTR_TEMPERATURE_UNIT));
                 }
@@ -93,42 +100,54 @@ public class ConditionsFragment extends Fragment implements ObservationDependent
 
 
             if(observation.hasAttribute(Observation.ATTR_WIND_SPEED)) {
+                currentView.findViewById(R.id.condition_average_wind_row).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_default_bg));
                 windSpeed.setText(observation.getAttribute(Observation.ATTR_WIND_SPEED));
+                windSpeed.setTextColor(ContextCompat.getColor(getContext(), R.color.text_dark));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
                     windSpeedUnit.setText(observation.getAttribute(Observation.ATTR_WIND_SPEED_UNIT));
                 }
             }
 
             if(observation.hasAttribute(Observation.ATTR_RAIN)) {
+                currentView.findViewById(R.id.condition_rain_row).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_default_bg));
                 rain.setText(observation.getAttribute(Observation.ATTR_RAIN));
+                rain.setTextColor(ContextCompat.getColor(getContext(), R.color.text_dark));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
                     rainUnit.setText(observation.getAttribute(Observation.ATTR_RAIN_UNIT));
                 }
             }
 
             if(observation.hasAttribute(Observation.ATTR_PRESSURE)) {
+                currentView.findViewById(R.id.condition_pressure_row).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_default_bg));
                 pressure.setText(observation.getAttribute(Observation.ATTR_PRESSURE));
+                pressure.setTextColor(ContextCompat.getColor(getContext(), R.color.text_dark));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
                     pressureUnit.setText(observation.getAttribute(Observation.ATTR_PRESSURE_UNIT));
                 }
             }
 
             if(observation.hasAttribute(Observation.ATTR_UV_INDEX)) {
+                currentView.findViewById(R.id.condition_uv_index_row).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_default_bg));
                 uvindex.setText(observation.getAttribute(Observation.ATTR_UV_INDEX));
+                uvindex.setTextColor(ContextCompat.getColor(getContext(), R.color.text_dark));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
                     uvindexUnit.setText(observation.getAttribute(Observation.ATTR_UV_INDEX_UNIT));
                 }
             }
 
             if(observation.hasAttribute(Observation.ATTR_INSOLATION)) {
+                currentView.findViewById(R.id.condition_insolation_row).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_default_bg));
                 insolation.setText(observation.getAttribute(Observation.ATTR_INSOLATION));
+                insolation.setTextColor(ContextCompat.getColor(getContext(), R.color.text_dark));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
                     insolationUnit.setText(observation.getAttribute(Observation.ATTR_INSOLATION_UNIT));
                 }
             }
 
             if(observation.hasAttribute(Observation.ATTR_HUMIDITY)) {
+                currentView.findViewById(R.id.condition_humidity_row).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.theme_default_bg));
                 humidity.setText(observation.getAttribute(Observation.ATTR_HUMIDITY));
+                humidity.setTextColor(ContextCompat.getColor(getContext(), R.color.text_dark));
                 if(observation.hasAttribute(Observation.ATTR_TEMPERATURE_UNIT)) {
                     humidityUnit.setText(observation.getAttribute(Observation.ATTR_HUMIDITY_UNIT));
                 }

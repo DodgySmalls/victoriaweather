@@ -68,11 +68,43 @@
     </style>
 
     <style name="Layout_ConditionRow">
-        <item name="android:background">@color/condition_row_background</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/conditions_unavailable_attr</item>
         <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
-        <item name="android:textSize">20sp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/fragment_conditions_outer_padding</item>
+    </style>
+    <style name="Layout_ConditionRow_NameText">
+        <item name="android:textSize">25sp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/text_dark</item>
+    </style>
+    <style name="Layout_ConditionRow_Text">
+        <item name="android:textSize">25sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="Layout_ConditionRow_UnitText">
+        <item name="android:paddingLeft">@dimen/fragment_conditions_unit_left_padding</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Layout_ConditionTitle">
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+    <style name="Layout_ConditionTitle_Text">
+        <item name="android:textSize">30sp</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="ConditionTitle">

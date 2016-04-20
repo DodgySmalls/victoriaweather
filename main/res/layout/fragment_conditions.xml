@@ -7,161 +7,194 @@
     <!-- conditions (attributes) ViewGroup -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
-            android:gravity="right"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:id="@+id/station_title"
+        <LinearLayout
+            style="@style/Layout_ConditionTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="@color/light_font"
-            android:shadowColor="@color/text_shadow"
-            android:shadowDx="-3"
-            android:shadowDy="-1"
-            android:shadowRadius="24.5"/>
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Layout_ConditionTitle_Text"
+
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit ="marquee_forever"
+                android:scrollHorizontally="true"
+
+                android:gravity="left"
+                android:paddingRight="@dimen/fragment_conditions_outer_padding"
+                android:paddingLeft="@dimen/fragment_conditions_outer_padding"
+                android:id="@+id/station_title"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"/>
+
+                <!-- dropshadow title code:
+                    android:shadowColor="@color/text_shadow"
+                    android:shadowDx="-3"
+                    android:shadowDy="-1"
+                    android:shadowRadius="24.5"
+                -->
+        </LinearLayout>
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_temperature_row"
             android:onClick="showGraphSelectionDialog"
-            android:gravity="right" >
+            android:gravity="left">
 
             <TextView
-                android:id="@+id/condition_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/condition_unavailable"/>
+                style="@style/Layout_ConditionRow_NameText"
+                android:id="@+id/condition_temperature_name"
+                android:text="@string/conditions_temperature"/>
+
             <TextView
+                style="@style/Layout_ConditionRow_Text"
+                android:id="@+id/condition_temperature"
+                android:text="@string/condition_unavailable"/>
+
+            <TextView
+                style="@style/Layout_ConditionRow_UnitText"
                 android:id="@+id/condition_temperature_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
                 android:text="@string/unit_unavailable"/>
         </LinearLayout>
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_average_wind_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
 
             <TextView
+                style="@style/Layout_ConditionRow_NameText"
+                android:id="@+id/condition_average_wind_name"
+                android:text="@string/conditions_average_wind"/>
+
+            <TextView
                 android:id="@+id/condition_average_wind"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_Text"
                 android:text="@string/condition_unavailable"/>
 
             <TextView
                 android:id="@+id/condition_average_wind_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_UnitText"
                 android:text="@string/unit_unavailable"/>
 
         </LinearLayout>
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_rain_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
 
             <TextView
+                style="@style/Layout_ConditionRow_NameText"
+                android:id="@+id/condition_rain_name"
+                android:text="@string/conditions_rain"/>
+
+            <TextView
                 android:id="@+id/condition_rain"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_Text"
                 android:text="@string/condition_unavailable"/>
 
             <TextView
                 android:id="@+id/condition_rain_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_UnitText"
                 android:text="@string/unit_unavailable"/>
         </LinearLayout>
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_pressure_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
 
             <TextView
+                style="@style/Layout_ConditionRow_NameText"
+                android:id="@+id/condition_pressure_name"
+                android:text="@string/conditions_pressure"/>
+
+            <TextView
                 android:id="@+id/condition_pressure"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_Text"
                 android:text="@string/condition_unavailable"/>
 
             <TextView
                 android:id="@+id/condition_pressure_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_UnitText"
                 android:text="@string/unit_unavailable"/>
         </LinearLayout>
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_uv_index_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
 
             <TextView
+                style="@style/Layout_ConditionRow_NameText"
+                android:id="@+id/condition_uv_index_name"
+                android:text="@string/conditions_uv"/>
+
+            <TextView
                 android:id="@+id/condition_uv_index"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_Text"
                 android:text="@string/condition_unavailable"/>
 
             <TextView
                 android:id="@+id/condition_uv_index_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_UnitText"
                 android:text="@string/unit_unavailable"/>
         </LinearLayout>
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_insolation_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right">
 
             <TextView
+                style="@style/Layout_ConditionRow_NameText"
+                android:id="@+id/condition_insolation_name"
+                android:text="@string/conditions_insolation"/>
+
+            <TextView
                 android:id="@+id/condition_insolation"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_Text"
                 android:text="@string/condition_unavailable"/>
 
             <TextView
                 android:id="@+id/condition_insolation_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_UnitText"
                 android:text="@string/unit_unavailable"/>
         </LinearLayout>
 
         <LinearLayout
             style="@style/Layout_ConditionRow"
-            android:orientation="horizontal"
             android:id="@+id/condition_humidity_row"
             android:onClick="showGraphSelectionDialog"
             android:gravity="right" >
 
             <TextView
+                style="@style/Layout_ConditionRow_NameText"
+                android:id="@+id/condition_humidity_name"
+                android:text="@string/conditions_humidity"/>
+
+            <TextView
                 android:id="@+id/condition_humidity"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_Text"
                 android:text="@string/condition_unavailable"/>
 
             <TextView
                 android:id="@+id/condition_humidity_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Layout_ConditionRow_UnitText"
                 android:text="@string/unit_unavailable"/>
         </LinearLayout>
 
@@ -169,7 +202,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/condition_observation_time"
-            android:text="@string/condition_unavailable"/>
+            android:text="@string/condition_time_unavailable"/>
 
     </LinearLayout>
 
@@ -183,7 +216,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/conditions_toggle_fav"
             android:text="@string/conditions_toggle_favourite"
-            android:onClick="toggleFavouriteFromConditionsFragment" />
+            android:onClick="toggleFavouriteFromConditionsFragment"
+            android:background="@drawable/btn_favourite"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
