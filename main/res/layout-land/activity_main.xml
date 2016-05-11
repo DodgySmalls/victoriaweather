@@ -11,9 +11,24 @@
         layout="@layout/layout_actionpanel"
         tools:context=".MainActivity"/>
 
-    <FrameLayout
-        android:id="@+id/main_display_frame"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"/>
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/main_display_frame"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/tab_smoother_land"
+            android:scaleType="fitXY"/>
+    </RelativeLayout>
+
+
 
 </LinearLayout>

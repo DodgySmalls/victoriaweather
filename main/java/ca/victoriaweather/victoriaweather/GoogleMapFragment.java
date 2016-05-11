@@ -1,15 +1,20 @@
 package ca.victoriaweather.victoriaweather;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.android.gms.maps.GoogleMap;
@@ -33,6 +38,7 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
     private MapView mMapView;
     private OnInfoWindowElemTouchListener mInfoButtonListener;
     private ViewGroup mInfoWindow;
+
     public GoogleMapFragment(){
 
     }
@@ -60,6 +66,24 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
     public void onCreate(Bundle savedInstanceState) {
         setRetainInstance(true);
         super.onCreate(savedInstanceState);
+
+        //Displaying a warning that GoogleMaps may use some mobile data (in certain preference+network configurations)
+        if(savedInstanceState == null){
+            try {
+                if (((WeatherApp) getActivity().getApplication()).isNetworkingAvailable()) {
+                    ConnectivityManager connMgr = (ConnectivityManager)getActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                    if(networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                        //Connection was denied by user but system still perceives mobile data as viable
+                        //this means GoogleMap(s) will use data regardless of user settings (needlessly difficult to mitigate)
+                        //display a warning to the user that some (minimal) data usage will occur
+
+                        Toast.makeText(getContext(), "(Warning)\r\nGoogle Maps will use small amounts of data to improve your experience.\r\nIf mobile data is a concern please disable data usage on your device.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            } catch(Exception e) {
+            }
+        }
 
         mInfoWindow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.layout_infowindow, null);
         Button infoButton = (Button)(mInfoWindow.findViewById(R.id.infowindow_button));
@@ -125,8 +149,16 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
             //TODO: mMapView.getMapAsync(this);
             //TODO: wrapper function for getMapAsync that checks if network state will be okay with using data
             mMap = mMapView.getMap();
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            if(preferences.getBoolean("pref_locationEnabled", false)) { //TODO check mismatch between return and default preference setting in preferences xml
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            }
+
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LATLNG, DEFAULT_ZOOM));
         }
 
@@ -215,6 +247,7 @@ public class GoogleMapFragment extends Fragment implements ObservationDependentU
                     if (o.hasAttribute(Observation.ATTR_TEMPERATURE)) {
                         m.snippet("Temperature: " + o.getAttribute(Observation.ATTR_TEMPERATURE) + o.getAttribute(Observation.ATTR_TEMPERATURE_UNIT));
                     }
+
                     mMap.addMarker(m);
                 } else {
                     Log.d("GoogleMapFragment", "reloadPins(): An observation existed without a valid LatLng");

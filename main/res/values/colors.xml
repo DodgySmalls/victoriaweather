@@ -15,7 +15,7 @@
     <color name="actionpanel_button_font">@color/light_font</color>
     <color name="actionpanel_button_press_font">@color/white</color>
     <color name="actionpanel_button_ripple">@color/actionpanel_button_press_bg</color>
-
+    <color name="actionpanel_bg">@color/black</color>
 
     <color name="conditions_unavailable_attr">@color/theme_red</color>
 

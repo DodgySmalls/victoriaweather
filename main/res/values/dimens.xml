@@ -7,8 +7,15 @@
 
     <dimen name="actionpanel_button_fontsize">20sp</dimen>
     <dimen name="actionpanel_progress_padding">5dp</dimen>
-    <dimen name="actionpanel_span">80dp</dimen>
+    <dimen name="actionpanel_size_land">40dp</dimen>
+    <dimen name="actionpanel_size">40dp</dimen>
+    <dimen name="actionpanel_base_padding">5dp</dimen>
+    <dimen name="actionpanel_refresh_button_size">35dp</dimen>
+    <dimen name="actionpanel_tab_border_size_land">18dp</dimen>
+    <dimen name="actionpanel_tab_border_size">10dp</dimen>
     <dimen name="actionpanel_refresh_padding">10dp</dimen>
+
+
     <!-- Default insets (outer padding) around buttons -->
     <dimen name="button_inset_vertical_material">6dp</dimen>
     <dimen name="button_inset_horizontal_material">@dimen/control_inset_material</dimen>

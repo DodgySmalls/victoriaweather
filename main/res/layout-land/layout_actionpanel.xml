@@ -2,36 +2,153 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/control_bar"
-    android:layout_width="@dimen/actionpanel_span"
+    android:layout_width="@dimen/actionpanel_size_land"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/actionpanel_bg"
+    android:paddingLeft="@dimen/actionpanel_base_padding">
 
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_panel_1"
-        android:onClick="onFavouritesListSelected" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_panel_2"
-        android:onClick="onObservationListSelected" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_panel_3"
-        android:onClick="onMapSelected"
-        android:paddingBottom="@dimen/actionpanel_refresh_padding"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <FrameLayout
-        android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/action_panel_button_fav"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:onClick="onFavouritesListSelected"
+            android:background="@drawable/btn_actionpanel_imgbtn_shape"
+            android:src="@drawable/btn_actionpanel_fav"
+            android:scaleType="centerInside"/>
+
+        <LinearLayout
+            android:id="@+id/action_panel_tab_fav"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionpanel_tab_border_size_land"
+                android:layout_weight="0"
+                android:src="@mipmap/tab_side_top"
+                android:scaleType="fitXY"/>
+
+            <RelativeLayout
+                style="@style/Layout_ActionPanel_TabText_Land">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/actionpanel_favourite_tab"/>
+            </RelativeLayout>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionpanel_tab_border_size_land"
+                android:layout_weight="0"
+                android:src="@mipmap/tab_side_bottom"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/action_panel_button_list"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:onClick="onObservationListSelected"
+            android:background="@drawable/btn_actionpanel_imgbtn_shape"
+            android:src="@drawable/btn_actionpanel_list"
+            android:scaleType="centerInside"/>
+
+        <LinearLayout
+            android:id="@+id/action_panel_tab_list"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionpanel_tab_border_size_land"
+                android:layout_weight="0"
+                android:src="@mipmap/tab_side_top"
+                android:scaleType="fitXY"/>
+
+            <RelativeLayout
+                style="@style/Layout_ActionPanel_TabText_Land">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/actionpanel_list_tab"/>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionpanel_tab_border_size_land"
+                android:layout_weight="0"
+                android:src="@mipmap/tab_side_bottom"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/action_panel_button_map"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:onClick="onMapSelected"
+            android:background="@drawable/btn_actionpanel_imgbtn_shape"
+            android:src="@drawable/btn_actionpanel_map"
+            android:scaleType="centerInside"/>
+
+        <LinearLayout
+            android:id="@+id/action_panel_tab_map"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionpanel_tab_border_size_land"
+                android:layout_weight="0"
+                android:src="@mipmap/tab_side_top"
+                android:scaleType="fitXY"/>
+
+            <RelativeLayout
+                style="@style/Layout_ActionPanel_TabText_Land">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/actionpanel_map_tab"/>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionpanel_tab_border_size_land"
+                android:layout_weight="0"
+                android:src="@mipmap/tab_side_bottom"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="0.5"
         android:id="@+id/actionpanel_reload_pane">
 
         <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_height="@dimen/actionpanel_refresh_button_size"
+            android:layout_width="@dimen/actionpanel_refresh_button_size"
             android:layout_gravity="center"
             style="@android:style/Widget.ProgressBar"
             android:paddingBottom="@dimen/actionpanel_progress_padding"
@@ -41,11 +158,11 @@
             android:id="@+id/actionpanel_networking_progressbar"/>
 
         <Button
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:text="@string/action_panel_refresh_button"
-            android:textSize="15sp"
+            android:layout_alignParentBottom="true"
+            android:layout_height="@dimen/actionpanel_refresh_button_size"
+            android:layout_width="@dimen/actionpanel_refresh_button_size"
+            android:background="@drawable/btn_actionpanel_refresh"
             android:id="@+id/action_panel_refresh"
             android:onClick="attemptRefresh"/>
-    </FrameLayout>
+    </RelativeLayout>
 </LinearLayout>

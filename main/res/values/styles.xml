@@ -111,6 +111,24 @@
         <!--TODO styles -->
     </style>
 
+    <style name="Layout_ActionPanel_TabText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:background">@color/theme_default_bg</item>
+    </style>
+
+    <style name="Layout_ActionPanel_TabText_Land">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:background">@color/theme_default_bg</item>
+    </style>
+
     <style name="TextView_About_Title">
         <item name="android:textColor">@color/text_dark</item>
         <item name="android:textSize">25sp</item>

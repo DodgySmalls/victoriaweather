@@ -39,10 +39,10 @@
     <string name="about_network_variables"><u>Variables we measure</u></string>
 
     <string name="about_blurb">
-        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!
+        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nThis is a beta, so there will be bugs! You might also experience poor performance on older devices. Apologies for any inconvenience.
     </string>
     <string name="about_blurb_land">
-        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!
+        The school based weather station network founded by Edward Wiebe and Andrew Weaver at UVic.\n\nThe android app was developed by Marty Wiebe and is open source!\n\nThis is a beta, so there will be bugs! You might also experience poor performance on older devices. Apologies for any inconvenience.
     </string>
 
     <string name="about_bugs_header">Find a bug? Want a feature?</string>

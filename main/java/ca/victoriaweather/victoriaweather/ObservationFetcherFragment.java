@@ -1,10 +1,15 @@
 package ca.victoriaweather.victoriaweather;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -86,6 +91,7 @@ public class ObservationFetcherFragment extends Fragment {
 
     private class FetchObservationListTask extends AsyncTask<WeatherApp, String, List<Observation>> {
         private WeatherApp app;
+        private boolean mProceed = false;
         private static final String STATION_XML_URL = "http://www.victoriaweather.ca/stations/latest/allcurrent.xml";
         private Exception runtimeException;
 
@@ -101,67 +107,83 @@ public class ObservationFetcherFragment extends Fragment {
 
         //TODO: SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
+        protected void onPreExecute() {
+            try {
+                mProceed = ((WeatherApp)getActivity().getApplication()).isNetworkingAvailable();
+            } catch (Exception e) {
+                //TODO better handling
+                //Internet is not connected if NPE is thrown
+                Log.e("ObsFetcherFrag", "Network exception stack trace", e);
+                Toast.makeText(getContext(), "Couldn't refresh.\r\nPlease check your network preference and connectivity.", Toast.LENGTH_LONG).show();
+                Log.d("ObsFetcherFrag", "No network found.");
+                mProceed = false;
+            }
+        }
+
         //currently priority isn't used and the whole list is always updated
         protected List<Observation> doInBackground(WeatherApp... app) {
             List<Observation> acq = new ArrayList<Observation>();
-            try {
-                URL url = new URL(FetchObservationListTask.STATION_XML_URL);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            if(mProceed) {
+                try {
+                    URL url = new URL(FetchObservationListTask.STATION_XML_URL);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-                publishProgress("Input stream opened");
-                Log.d("FetchStationListTask", "Fetched XML");
+                    publishProgress("Input stream opened");
+                    Log.d("FetchStationListTask", "Fetched XML");
 
-                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder docBuilder;
-                Document xmlDoc;
+                    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder docBuilder;
+                    Document xmlDoc;
 
-                docBuilder = docFactory.newDocumentBuilder();
-                xmlDoc = docBuilder.parse(in);
-                xmlDoc.getDocumentElement().normalize();
+                    docBuilder = docFactory.newDocumentBuilder();
+                    xmlDoc = docBuilder.parse(in);
+                    xmlDoc.getDocumentElement().normalize();
 
-                publishProgress("XML parsed + normalized");
+                    publishProgress("XML parsed + normalized");
 
-                NodeList stationXMLList = xmlDoc.getElementsByTagName("current_observation");
-                Log.d("FetchStationListTask", "Station count: " + Integer.toString(stationXMLList.getLength()));
-                for (int i = 0; i < stationXMLList.getLength(); i++) {
-                    Node n = stationXMLList.item(i);
-                    if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        Element e = (Element) n;
-                        if (e.getElementsByTagName(Observation.ATTR_ID).item(0) == null) {
-                            //Station data is considered unrecoverable if ID is not present in the xml
-                            Log.d("FetchStationListTask", "There was an unidentified station within the XML");
-                            continue;
-                        }
-
-                        Observation o = new Observation(e.getElementsByTagName(Observation.ATTR_ID).item(0).getTextContent());
-                        NodeList valuelist = e.getChildNodes();
-                        for (int j = 0; j < valuelist.getLength(); j++) {
-                            if (valuelist.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                                o.putAttribute(((Element) valuelist.item(j)).getTagName(), valuelist.item(j).getTextContent());
+                    NodeList stationXMLList = xmlDoc.getElementsByTagName("current_observation");
+                    Log.d("FetchStationListTask", "Station count: " + Integer.toString(stationXMLList.getLength()));
+                    for (int i = 0; i < stationXMLList.getLength(); i++) {
+                        Node n = stationXMLList.item(i);
+                        if (n.getNodeType() == Node.ELEMENT_NODE) {
+                            Element e = (Element) n;
+                            if (e.getElementsByTagName(Observation.ATTR_ID).item(0) == null) {
+                                //Station data is considered unrecoverable if ID is not present in the xml
+                                Log.d("FetchStationListTask", "There was an unidentified station within the XML");
+                                continue;
                             }
-                        }
 
-                        acq.add(o);
+                            Observation o = new Observation(e.getElementsByTagName(Observation.ATTR_ID).item(0).getTextContent());
+                            NodeList valuelist = e.getChildNodes();
+                            for (int j = 0; j < valuelist.getLength(); j++) {
+                                if (valuelist.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                    o.putAttribute(((Element) valuelist.item(j)).getTagName(), valuelist.item(j).getTextContent());
+                                }
+                            }
+
+                            acq.add(o);
+                        }
                     }
+
+                    urlConnection.disconnect();
+                    in.close();
+                } catch (Exception e) {
+                    runtimeException = e;
+                    Log.d("FetchStationListTask", "EXCEPTION" + e.getClass().getName());
                 }
 
-                urlConnection.disconnect();
-                in.close();
-            } catch (Exception e) {
-                runtimeException = e;
-                Log.d("FetchStationListTask", "EXCEPTION" + e.getClass().getName());
+                //TODO: CLEANUP PARAMETER PASSING -> doInBackground & -> onPostExecute
+
+                Queue<Observation> messages = app[0].getObservationQueue();
+                for(Observation o : acq) {
+                    messages.add(o);
+                }
+
+                publishProgress("finished");
+            } else {
+                Log.d("ObsFetcherFrag", "Determined that networking should not be executed due to network configuration preferences");
             }
-
-            //TODO: CLEANUP PARAMETER PASSING -> doInBackground & -> onPostExecute
-            try {Thread.sleep(1000);}catch(Exception e) {}
-
-            Queue<Observation> messages = app[0].getObservationQueue();
-            for(Observation o : acq) {
-                messages.add(o);
-            }
-
-            publishProgress("finished");
             return acq;
         }
 
@@ -175,7 +197,6 @@ public class ObservationFetcherFragment extends Fragment {
             //TODO remove progress twirler from UI
 
             networkListener.onRetrievedList();
-            //app.setStationLock(false);
 
             mAsyncTask = null;
 

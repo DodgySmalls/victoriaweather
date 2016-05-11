@@ -32,14 +32,20 @@ public class MainActivity extends AppCompatActivity
                    ObservationFetcherFragment.networkListener,
                    GraphSelectionDialogFragment.interactionListener {
 
-    private static final String BUNDLE_FIRST_LOAD = "BUNDLE_FIRST_LOAD";
-    private static final String BUNDLE_OBSERVATIONS = "BUNDLE_ALL_OBSERVATIONS";
-    private static final String BUNDLE_PERCEIVED_NETWORKING = "BUNDLE_NETWORK_BOOL";
-    private static final String FAVOURITES_FILENAME = "VICTORIAWEATHER_FAVOURITES_LIST";
+    private enum FocusTarget {
+        FAVOURITES, LIST, MAP, CONDITIONS
+    }
+
+    private static final String BUNDLE_FIRST_LOAD = "ca.victoriaweather.victoriaweather.BUNDLE_FIRST_LOAD";
+    private static final String BUNDLE_OBSERVATIONS = "ca.victoriaweather.victoriaweather.BUNDLE_ALL_OBSERVATIONS";
+    private static final String BUNDLE_PERCEIVED_NETWORKING = "ca.victoriaweather.victoriaweather.BUNDLE_NETWORK_BOOL";
+    private static final String BUNDLE_FOCUS_TARGET = "ca.victoriaweather.victoriaweather.BUNDLE_FOCUS_TARGET";
+    private static final String FAVOURITES_FILENAME = "ca.victoriaweather.victoriaweather.VICTORIAWEATHER_FAVOURITES_LIST";
 
     private ArrayList<Observation> observations;
     private boolean firstLoad = true;
     private boolean perceivedNetworking = false;
+    private FocusTarget focus;
 
 
     //TODO avoid FAILED BINDER TRANSACTION
@@ -58,7 +64,7 @@ public class MainActivity extends AppCompatActivity
             observations = new ArrayList<Observation>();
 
             checkQueue((WeatherApp) getApplication());
-
+            focus = FocusTarget.LIST;
             getSupportFragmentManager().beginTransaction().add(R.id.main_display_frame, ObservationListFragment.newInstanceOf(), ObservationListFragment.FM_TAG).commit();
 
             loadFavourites();
@@ -69,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             observations = Observation.observationsFromBundleArrayList(savedInstanceState.getParcelableArrayList(BUNDLE_OBSERVATIONS));
             firstLoad = savedInstanceState.getBoolean(BUNDLE_FIRST_LOAD);
+            focus = (FocusTarget) savedInstanceState.get(BUNDLE_FOCUS_TARGET);
             perceivedNetworking = savedInstanceState.getBoolean(BUNDLE_PERCEIVED_NETWORKING);
 
             if(perceivedNetworking) {
@@ -78,6 +85,8 @@ public class MainActivity extends AppCompatActivity
             }
             checkQueue((WeatherApp)getApplication());
         }
+
+        updateActionPanelUI();
     }
 
     @Override
@@ -115,6 +124,7 @@ public class MainActivity extends AppCompatActivity
         try {
             outState.putBoolean(BUNDLE_FIRST_LOAD, firstLoad);
             outState.putBoolean(BUNDLE_PERCEIVED_NETWORKING, perceivedNetworking);
+            outState.putSerializable(BUNDLE_FOCUS_TARGET, focus);
             outState.putParcelableArrayList(BUNDLE_OBSERVATIONS, Observation.observationsToBundleArrayList(observations));
         } catch (NullPointerException e) {
             Log.d("MainActivity", "onSaveInstanceState() NullPointerException @observations or @favouriteStrings");
@@ -123,6 +133,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onObservationSelected(Observation observation) {
+        focus = FocusTarget.CONDITIONS;
         ConditionsFragment fragment = (ConditionsFragment)getSupportFragmentManager().findFragmentByTag(ConditionsFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -144,9 +155,11 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().executePendingTransactions();
             fragment.updateObservations(Observation.observationsToBundleArrayList(observations));
         }
+        updateActionPanelUI();
     }
 
     public void onFavouritesListSelected(View callingView) {
+        focus = FocusTarget.FAVOURITES;
         FavouriteListFragment fragment = (FavouriteListFragment)getSupportFragmentManager().findFragmentByTag(FavouriteListFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -166,9 +179,11 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().executePendingTransactions();
             fragment.updateObservations(Observation.observationsToBundleArrayList(observations));
         }
+        updateActionPanelUI();
     }
 
     public void onObservationListSelected(View callingView) {
+        focus = FocusTarget.LIST;
         ObservationListFragment fragment = (ObservationListFragment)getSupportFragmentManager().findFragmentByTag(ObservationListFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -187,9 +202,11 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().executePendingTransactions();
             fragment.updateObservations(Observation.observationsToBundleArrayList(observations));
         }
+        updateActionPanelUI();
     }
 
     public void onMapSelected(View callingView) {
+        focus = FocusTarget.MAP;
         GoogleMapFragment fragment = (GoogleMapFragment)getSupportFragmentManager().findFragmentByTag(GoogleMapFragment.FM_TAG);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -209,6 +226,39 @@ public class MainActivity extends AppCompatActivity
         if(observations.size() > 0 && !firstLoad) {
             getSupportFragmentManager().executePendingTransactions();
             fragment.updateObservations(Observation.observationsToBundleArrayList(observations));
+        }
+        updateActionPanelUI();
+    }
+
+    private void updateActionPanelUI() {
+        View btnView = findViewById(R.id.action_panel_button_fav);
+        View tabView = findViewById(R.id.action_panel_tab_fav);
+        if(focus == FocusTarget.FAVOURITES) {
+            btnView.setVisibility(View.GONE);
+            tabView.setVisibility(View.VISIBLE);
+        } else {
+            btnView.setVisibility(View.VISIBLE);
+            tabView.setVisibility(View.GONE);
+        }
+
+        btnView = findViewById(R.id.action_panel_button_list);
+        tabView = findViewById(R.id.action_panel_tab_list);
+        if(focus == FocusTarget.LIST) {
+            btnView.setVisibility(View.GONE);
+            tabView.setVisibility(View.VISIBLE);
+        } else {
+            btnView.setVisibility(View.VISIBLE);
+            tabView.setVisibility(View.GONE);
+        }
+
+        btnView = findViewById(R.id.action_panel_button_map);
+        tabView = findViewById(R.id.action_panel_tab_map);
+        if(focus == FocusTarget.MAP) {
+            btnView.setVisibility(View.GONE);
+            tabView.setVisibility(View.VISIBLE);
+        } else {
+            btnView.setVisibility(View.VISIBLE);
+            tabView.setVisibility(View.GONE);
         }
     }
 
